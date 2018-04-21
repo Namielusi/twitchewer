@@ -1,9 +1,11 @@
 const actionTypes = {
+  updateAccessToken: 'UPDATE_ACCESS_TOKEN',
   updateUser: 'UPDATE_USER',
   updateUserSubscriptions: 'UPDATE_USER_SUBSCRIPTIONS',
 };
 
 const initialState = {
+  access_token: null,
   user: {
     id: null,
   },
@@ -12,6 +14,12 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.updateAccessToken: {
+      return {
+        ...state,
+        access_token: action.payload.token,
+      };
+    }
     case actionTypes.updateUser: {
       return {
         ...state,

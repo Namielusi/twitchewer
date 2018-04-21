@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import WelcomeMessage from '../imports/pages/home/WelcomeMessage';
 
-const Home = () => (<WelcomeMessage />);
+const HomePage = () => (<WelcomeMessage />);
 
 // class Home extends Component {
 //   static propTypes = {
@@ -32,4 +32,4 @@ const Home = () => (<WelcomeMessage />);
 // });
 //
 // export default connect(mapStateToProps, mapDispatchToProps)(Home);
-export default connect(null, null)(Home);
+export default connect(null, null)(HomePage);
