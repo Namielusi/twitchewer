@@ -2,6 +2,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: [
+    'babel-polyfill',
     'react-hot-loader/patch',
     './app/index.js',
   ],
@@ -47,5 +48,7 @@ module.exports = {
   devServer: {
     contentBase: './app/static',
     hot: true,
+    historyApiFallback: true,
+    port: 3000,
   },
 };
