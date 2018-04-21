@@ -1,38 +1,35 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
 
-import { updateUserAction } from '../actions';
+// import { updateUserAction } from '../actions';
 
-import Layout from '../components/layouts/Layout';
-import styles from './home.sass';
+import WelcomeMessage from '../imports/pages/home/WelcomeMessage';
 
-class Home extends Component {
-  static propTypes = {
-    user: PropTypes.shape({}),
-  }
+const Home = () => (<WelcomeMessage />);
 
-  static defaultProps = {}
+// class Home extends Component {
+//   static propTypes = {
+//     user: PropTypes.shape({}),
+//   }
+//
+//   static defaultProps = {}
+//
+//   render() {
+//     return (
+//       <div>
+//         <WelcomeMessage />
+//       </div>
+//     );
+//   }
+// }
 
-  // eslint-disable-next-line
-  render() {
-    return (
-      <Layout>
-        <div className={styles.wrapper}>
-          <div className={styles.header}>Welcome to the Twitchewer!</div>
-          <div className={styles.description}>Please, choise the channel on the left menu.</div>
-        </div>
-      </Layout>
-    );
-  }
-}
-
-const mapStateToProps = state => ({
-  user: state.user,
-});
-
-const mapDispatchToProps = dispatch => ({
-  updateUser: args => dispatch(updateUserAction(args)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+// const mapStateToProps = state => ({
+//   user: state.user,
+// });
+//
+// const mapDispatchToProps = dispatch => ({
+//   updateUser: args => dispatch(updateUserAction(args)),
+// });
+//
+// export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(null, null)(Home);
