@@ -1,12 +1,10 @@
-import { createStore, combineReducers } from 'redux';
+import { createStore } from 'redux';
 
-import home from './pages/home/reducers';
+import reducers from './reducers';
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(
-  combineReducers({
-    home,
-  }),
+  reducers,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
 /* eslint-enable */
