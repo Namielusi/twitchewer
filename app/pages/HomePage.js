@@ -3,9 +3,12 @@ import { connect } from 'react-redux';
 
 // import { updateUserInfoAction } from '../actions';
 
+// import Layout from '../imports/layouts/Layout';
 import WelcomeMessage from '../imports/pages/home/WelcomeMessage';
 
-const HomePage = () => (<WelcomeMessage />);
+const HomePage = () => (
+  <WelcomeMessage />
+);
 
 // class Home extends Component {
 //   static propTypes = {

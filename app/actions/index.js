@@ -1,3 +1,8 @@
+export const updateLoadingAction = state => ({
+  type: 'UPDATE_LOADING',
+  payload: state,
+});
+
 export const updateAccessToken = token => ({
   type: 'UPDATE_ACCESS_TOKEN',
   payload: {

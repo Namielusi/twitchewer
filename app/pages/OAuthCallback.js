@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import qs from 'qs';
 
-import { updateAccessToken } from '../../actions';
+import { updateAccessToken } from 'Actions';
 
 const OAuthPage = ({
   location,
@@ -29,10 +29,6 @@ OAuthPage.defaultProps = {
     hash: '',
   },
 };
-
-// const mapStateToProps = state => ({
-//   user: state.user,
-// });
 
 const mapDispatchToProps = dispatch => ({
   setAccessToken: token => dispatch(updateAccessToken(token)),

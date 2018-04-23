@@ -1,5 +1,13 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import {
+  Container,
+  Row,
+  Col,
+
+  ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText,
+} from 'reactstrap';
 import { pure } from 'recompose';
 import Link from 'react-router-dom/Link';
 
@@ -34,24 +42,23 @@ class MainMenuItem extends Component {
       external,
     } = this.props;
 
+    const externalProp = external ? { target: '_self' } : {};
     const image = typeof img === 'string' ?
-      <img className={styles.image} src={img} /> :
+      <img className="w-100 rounded float-left" src={img} /> :
       img;
 
-    const externalProp = external ? { target: '_self' } : {};
-
     return (
-      <div className={styles.item}>
-        <Link className={styles.itemLogoLink} to={url} {...externalProp}>
-          <div className={styles.itemLogo}>{image}</div>
-        </Link>
-        <div className={styles.itemInfo}>
-          <Link className={styles.itemInfoLink} to={url} {...externalProp}>
-            <div className={styles.itemTitle}>{title}</div>
-          </Link>
-          <div className={styles.itemDesc}>{description}</div>
-        </div>
-      </div>
+      <Link className="list-group-item" to={url} {...externalProp}>
+        <Row className="align-items-center">
+          <Col className="text-center" md="3">{image}</Col>
+          <Col sm>
+            <Row>{title}</Row>
+            <Row>
+              <small>{description}</small>
+            </Row>
+          </Col>
+        </Row>
+      </Link>
     );
   }
 }

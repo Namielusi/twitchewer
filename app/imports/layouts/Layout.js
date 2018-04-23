@@ -2,20 +2,27 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-// import { pure } from 'recompose';
-import axios from 'axios';
+import { Container, Row, Col } from 'reactstrap';
+import NProgress from 'nprogress';
+import classnames from 'classnames';
 import _ from 'lodash';
 
+import api from 'Lib/api';
+
 import {
+  updateLoadingAction,
   updateUserInfoAction,
   updateChannelListAction,
-} from '../../actions';
+} from 'Actions';
+import 'nprogress/nprogress.css';
 import styles from './Layout.sass';
 
+import Loading from './components/Loading';
 import MainMenu from './components/MainMenu';
 
 class Layout extends Component {
   static propTypes = {
+    loading: PropTypes.bool,
     accessToken: PropTypes.string,
     user: PropTypes.shape({}),
     channels: PropTypes.array,
@@ -23,6 +30,7 @@ class Layout extends Component {
   }
 
   static defaultProps = {
+    loading: false,
     accessToken: null,
     user: {},
     channels: [],
@@ -31,48 +39,33 @@ class Layout extends Component {
   constructor() {
     super();
 
-    this.state = {
-      loading: false,
-    };
-
     this.fetchData = this.fetchData.bind(this);
   }
 
   async componentWillMount() {
-    this.setState({ loading: true });
-
+    NProgress.start();
     await this.fetchData();
     if (this.props.children.fetchData) {
       await this.props.children.fetchData();
     }
-
-    this.setState({ loading: false });
+    NProgress.done();
   }
 
   async fetchData() {
     const {
+      user,
       accessToken,
+      updateLoading,
       updateUserInfo,
       updateChannelList,
     } = this.props;
 
-    if (!accessToken) { return; }
+    if (!accessToken || user.id) { return; }
 
-    const { data: userData } = await axios.get('https://api.twitch.tv/kraken/user', {
-      headers: {
-        Accept: 'application/vnd.twitchtv.v5+json',
-        Authorization: `OAuth ${accessToken}`,
-        'Client-ID': process.env.CLIENT_ID,
-      },
-    });
+    updateLoading(true);
 
-    const { data: followsData } = await axios.get(`https://api.twitch.tv/kraken/users/${userData._id}/follows/channels`, {
-      headers: {
-        Accept: 'application/vnd.twitchtv.v5+json',
-        Authorization: `OAuth ${accessToken}`,
-        'Client-ID': process.env.CLIENT_ID,
-      },
-    });
+    const { data: userData } = await api('get', 'https://api.twitch.tv/kraken/user')(accessToken);
+    const { data: followsData } = await api('get', `https://api.twitch.tv/kraken/users/${userData._id}/follows/channels`)(accessToken);
 
     const channels = [];
 
@@ -81,25 +74,13 @@ class Layout extends Component {
 
       // Check is user subscribed to this channel
       try {
-        await axios.get(`https://api.twitch.tv/kraken/users/${userData._id}/subscriptions/${channel._id}`, {
-          headers: {
-            Accept: 'application/vnd.twitchtv.v5+json',
-            Authorization: `OAuth ${accessToken}`,
-            'Client-ID': process.env.CLIENT_ID,
-          },
-        });
+        await api('get', `https://api.twitch.tv/kraken/users/${userData._id}/subscriptions/${channel._id}`)(accessToken);
         subscribed = true;
       } catch (e) {
         subscribed = false;
       }
 
-      const { data: { videos: [lastVideoData] } } = await axios.get(`https://api.twitch.tv/kraken/channels/${channel._id}/videos?limit=1`, {
-        headers: {
-          Accept: 'application/vnd.twitchtv.v5+json',
-          Authorization: `OAuth ${accessToken}`,
-          'Client-ID': process.env.CLIENT_ID,
-        },
-      });
+      const { data: { videos: [lastVideoData] } } = await api('get', `https://api.twitch.tv/kraken/channels/${channel._id}/videos?limit=1`)(accessToken);
 
       channels.push({
         id: channel._id,
@@ -136,40 +117,46 @@ class Layout extends Component {
       logo: userData.logo,
     });
     updateChannelList(sortedChannels);
+
+    updateLoading(false);
   }
 
   render() {
-    const { loading } = this.state;
     const {
+      loading,
       user,
       channels,
       children,
     } = this.props;
 
-    const renderLoading = (
-      <div>Loading. Please, wait.</div>
-    );
-
     if (loading) {
-      return renderLoading;
+      return <Loading />;
     }
 
+    const containerClasses = classnames(styles.container, 'h-100');
+
     return (
-      <div className={styles.wrapper}>
-        <MainMenu user={user} channels={channels} />
-        <div className={styles.container}>{children}</div>
-      </div>
+      <Container className={containerClasses} fluid={true}>
+        <Row className="h-100" noGutters={true}>
+          <Col className={styles.leftBar} xs="2">
+            <MainMenu className="h-100 rounded-0 border-left-0 border-top-0 border-bottom-0" user={user} channels={channels} />
+          </Col>
+          <Col className={styles.body}>{children}</Col>
+        </Row>
+      </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  accessToken: state.access_token,
+const mapStateToProps = ({ root: state }) => ({
+  loading: state.loading,
+  accessToken: state.accessToken,
   user: state.user,
   channels: state.channels,
 });
 
 const mapDispatchToProps = dispatch => ({
+  updateLoading: data => dispatch(updateLoadingAction(data)),
   updateUserInfo: data => dispatch(updateUserInfoAction(data)),
   updateChannelList: data => dispatch(updateChannelListAction(data)),
 });
