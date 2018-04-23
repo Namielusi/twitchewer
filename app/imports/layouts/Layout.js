@@ -66,8 +66,19 @@ class Layout extends Component {
 
     const { data: userData } = await api('get', 'https://api.twitch.tv/kraken/user')(accessToken);
     const { data: followsData } = await api('get', `https://api.twitch.tv/kraken/users/${userData._id}/follows/channels`)(accessToken);
+    const { data: streamsData } = await api('get', 'https://api.twitch.tv/kraken/streams/followed')(accessToken);
 
     const channels = [];
+    const streams = {};
+
+    streamsData.streams.forEach((stream) => {
+      streams[stream.channel._id] = {
+        averageFps: stream.average_fps,
+        game: stream.game,
+        previews: stream.preview,
+        viewers: stream.viewers,
+      };
+    });
 
     await Promise.all(_.map(followsData.follows, async ({ channel }) => {
       let subscribed;
@@ -89,26 +100,14 @@ class Layout extends Component {
         logo: channel.logo,
         banner: channel.profile_banner,
         subscribed,
-        lastActive: channel.updated_at,
-        videos: [
-          {
-            id: lastVideoData.broadcast_id,
-            title: lastVideoData.title,
-            type: lastVideoData.broadcast_type,
-            status: lastVideoData.status,
-            resolutions: lastVideoData.resolutions,
-            fps: lastVideoData.fps,
-            previews: lastVideoData.preview,
-            created_at: lastVideoData.created_at,
-            published_at: lastVideoData.published_at,
-          },
-        ],
+        lastActive: lastVideoData.published_at,
+        streaming: typeof streams[channel._id] === 'object',
+        streamInfo: streams[channel._id] || null,
+        videos: [],
       });
     }));
 
-    const sortedChannels = channels.sort((prev, next) =>
-      new Date((next.videos[0] || {}).published_at || 0) -
-      new Date((prev.videos[0] || {}).published_at || 0));
+    const sortedChannels = _.orderBy(channels, ['streaming', 'streamInfo.viewers', 'subscribed', 'lastActive'], ['desc', 'desc', 'desc', 'desc']);
 
     updateUserInfo({
       id: userData._id,

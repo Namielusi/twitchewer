@@ -8,6 +8,7 @@ import {
 
   ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText,
 } from 'reactstrap';
+import classnames from 'classnames';
 import { pure } from 'recompose';
 import Link from 'react-router-dom/Link';
 
@@ -15,6 +16,7 @@ import styles from './MainMenuItem.sass';
 
 class MainMenuItem extends Component {
   static propTypes = {
+    className: PropTypes.string,
     img: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.element,
@@ -26,6 +28,7 @@ class MainMenuItem extends Component {
   }
 
   static defaultProps = {
+    className: '',
     img: '',
     title: '',
     description: '',
@@ -35,6 +38,7 @@ class MainMenuItem extends Component {
 
   render() {
     const {
+      className,
       img,
       title,
       description,
@@ -42,19 +46,21 @@ class MainMenuItem extends Component {
       external,
     } = this.props;
 
+    const classes = classnames('list-group-item', 'rounded-0', className);
+
     const externalProp = external ? { target: '_self' } : {};
     const image = typeof img === 'string' ?
       <img className="w-100 rounded float-left" src={img} /> :
       img;
 
     return (
-      <Link className="list-group-item" to={url} {...externalProp}>
+      <Link className={classes} to={url} {...externalProp}>
         <Row className="align-items-center">
           <Col className="text-center" md="3">{image}</Col>
           <Col sm>
             <Row>{title}</Row>
             <Row>
-              <small>{description}</small>
+              <small className={styles.small}>{description}</small>
             </Row>
           </Col>
         </Row>
