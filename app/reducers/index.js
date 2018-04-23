@@ -1,15 +1,17 @@
 const actionTypes = {
   updateAccessToken: 'UPDATE_ACCESS_TOKEN',
-  updateUser: 'UPDATE_USER',
-  updateUserSubscriptions: 'UPDATE_USER_SUBSCRIPTIONS',
+  updateUserInfo: 'UPDATE_USER_INFO',
+  updateChannelListAction: 'UPDATE_CHANNEL_LIST',
 };
 
 const initialState = {
   access_token: null,
   user: {
     id: null,
+    name: null,
+    displayName: null,
   },
-  subscriptions: [],
+  channels: [],
 };
 
 export default (state = initialState, action) => {
@@ -20,7 +22,7 @@ export default (state = initialState, action) => {
         access_token: action.payload.token,
       };
     }
-    case actionTypes.updateUser: {
+    case actionTypes.updateUserInfo: {
       return {
         ...state,
         user: {
@@ -29,10 +31,10 @@ export default (state = initialState, action) => {
         },
       };
     }
-    case actionTypes.updateUserSubscriptions: {
+    case actionTypes.updateChannelListAction: {
       return {
         ...state,
-        subscriptions: action.payload,
+        channels: action.payload,
       };
     }
     default: return state;

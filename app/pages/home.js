@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-// import { updateUserAction } from '../actions';
+// import { updateUserInfoAction } from '../actions';
 
 import WelcomeMessage from '../imports/pages/home/WelcomeMessage';
 
@@ -28,7 +28,7 @@ const HomePage = () => (<WelcomeMessage />);
 // });
 //
 // const mapDispatchToProps = dispatch => ({
-//   updateUser: args => dispatch(updateUserAction(args)),
+//   updateUser: args => dispatch(updateUserInfoAction(args)),
 // });
 //
 // export default connect(mapStateToProps, mapDispatchToProps)(Home);

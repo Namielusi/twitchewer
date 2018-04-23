@@ -1,24 +1,42 @@
 .wrapper
-  position: relative
   width: 60px
   min-width: 60px
   height: 100%
-  padding: 5px
-  background: #392e5c
-  box-sizing: border-box
+  color: #fff
+
+.container
+  position: relative
+  width: 60px
+  height: 100%
+  background: #673AB7
   overflow: hidden
+  transition: width ease 250ms
+  &_opened
+    width: 280px
+
+.contentContainer
+  padding: 5px
+  box-sizing: border-box
 
 .verticalLine
   display: block
-  margin: 10px auto
-  border-bottom: 1px solid #69539e
-  width: 80%
+  margin: 0 auto
+  border-bottom: 1px solid #B39DDB
+  width: 100%
 
 .itemWrapper
   position: absolute
-  top: 76px
+  top: 121px
   bottom: 0
   left: 5px
   right: -17px
   overflow-x: hidden
   overflow-y: auto
+
+.arrowWrapper
+  width: 50px
+  height: 25px
+  margin-bottom: 10px
+  border-radius: 5px
+  background: #7E57C2
+  text-align: center

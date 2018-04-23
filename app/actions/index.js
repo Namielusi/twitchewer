@@ -5,11 +5,17 @@ export const updateAccessToken = token => ({
   },
 });
 
-export const updateUserAction = () => ({
-  type: 'UPDATE_USER',
+export const updateUserInfoAction = payload => ({
+  type: 'UPDATE_USER_INFO',
+  payload: {
+    id: payload.id,
+    name: payload.name,
+    displayName: payload.displayName,
+    logo: payload.logo,
+  },
 });
 
-export const updateUserSubscriptionsAction = uid => ({
-  type: 'UPDATE_USER_SUBSCRIPTIONS',
-  uid,
+export const updateChannelListAction = list => ({
+  type: 'UPDATE_CHANNEL_LIST',
+  payload: list,
 });

@@ -8,7 +8,7 @@ import OAuthPage from './pages/callback/oauth';
 const Routes = () => (
   <Switch>
     <Route exact path='/' component={HomePage} />
-    <Route exact path='/callback/oauth' component={OAuthPage} />
+    <Route exact path='/oauth' component={OAuthPage} />
     <Route exact path='/user' component={UserPage} />
     <Route path='/user/:nickname' component={UserPage} />
   </Switch>
