@@ -1,61 +1,101 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import axios from 'axios';
+import Link from 'react-router-dom/Link';
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  CardImg,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  CardText,
+  ListGroup,
+  ListGroupItem,
+  Badge,
+} from 'reactstrap';
+import _ from 'lodash';
 
 class UserPage extends Component {
   static propTypes = {
     user: PropTypes.shape({}),
+    channels: PropTypes.array,
   }
 
   static defaultProps = {
     user: {},
+    channels: {},
   }
 
   constructor(props) {
-    super();
+    super(props);
 
     this.state = {
-      user: props.user,
+      profile: {
+        name: '',
+        displayName: '',
+      },
     };
   }
 
-  // async componentWillMount() {
-  //   const { data } = await axios.get('https://api.twitch.tv/kraken/user', {
-  //     headers: {
-  //       'Client-ID': '07iih8401gr5s8v1h9rps7rsa0son4',
-  //       Authorization: 'OAuth z2obeig1zclnezmzgovfngu03mypi2',
-  //     },
-  //   });
-  //
-  //   this.setState({
-  //     userInfo: {
-  //       id: data._id, // eslint-disable-line
-  //       nickname: data.display_name,
-  //     },
-  //   });
-  // }
+  componentWillMount() {
+    const {
+      user,
+      channels,
+      computedMatch,
+    } = this.props;
+
+    const isProfile = user.name === computedMatch.params.name;
+    if (isProfile) {
+      this.setState({ profile: user });
+    } else {
+      this.setState({ profile: _.find(channels, { name: computedMatch.params.name }) });
+    }
+  }
 
   render() {
-    const {
-      user: {
-        id,
-        displayName,
-      },
-    } = this.state;
+    const { profile } = this.state;
+
+    if (!profile) {
+      return <div />;
+    }
 
     return (
-      <div>
-        ID: {id}<br />
-        Nickname: {displayName}<br />
-      </div>
+      <Container className="h-100" fluid={true}>
+        <Row className="h-100 no-gutters">
+          <Col>
+            <Row>Menu</Row>
+            <Row>Body</Row>
+          </Col>
+          <Col className="mh-100 border border-top-0 border-right-0 border-bottom-0" xs="2">
+            <Card className="rounded-0 border-0">
+              <CardBody>
+                <CardTitle>{profile.displayName}</CardTitle>
+                <CardSubtitle>Offline</CardSubtitle>
+              </CardBody>
+              <CardImg className="rounded-0" src={profile.logo} />
+              <ListGroup flush={true}>
+                <Link className="list-group-item rounded-0" to="live">Live</Link>
+                <Link className="list-group-item rounded-0" to="videos">Videos</Link>
+                <Link className="list-group-item rounded-0" to="clips">Clips</Link>
+                <Link className="list-group-item rounded-0" to="followers">Followers</Link>
+                <Link className="list-group-item rounded-0" to="followed">Followed</Link>
+              </ListGroup>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = ({ root: state }) => ({
   user: state.user,
+  channels: state.channels,
 });
 
 export default connect(mapStateToProps, null)(UserPage);
