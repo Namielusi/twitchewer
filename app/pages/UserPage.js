@@ -65,7 +65,7 @@ class UserPage extends Component {
     }
 
     return (
-      <Container className="h-100" fluid={true}>
+      <Container className="h-100 pr-0" fluid={true}>
         <Row className="h-100 no-gutters">
           <Col>
             <Row>Menu</Row>
@@ -75,7 +75,7 @@ class UserPage extends Component {
             <Card className="rounded-0 border-0">
               <CardBody>
                 <CardTitle>{profile.displayName}</CardTitle>
-                <CardSubtitle>Offline</CardSubtitle>
+                <CardSubtitle>{profile.streaming ? profile.streamInfo.game : 'Offline'}</CardSubtitle>
               </CardBody>
               <CardImg className="rounded-0" src={profile.logo} />
               <ListGroup flush={true}>
