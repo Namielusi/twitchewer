@@ -20,6 +20,10 @@ import {
 } from 'reactstrap';
 import _ from 'lodash';
 
+import { videos as videosAction } from 'Actions';
+
+import VideoList from '../imports/pages/user/VideoList';
+
 class UserPage extends Component {
   static propTypes = {
     user: PropTypes.shape({}),
@@ -35,58 +39,55 @@ class UserPage extends Component {
 
   }
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      profile: {
-        name: '',
-        displayName: '',
-      },
-    };
-  }
-
   componentWillMount() {
     const {
-      user,
       channels,
       computedMatch,
+      fetchVideos,
     } = this.props;
+    const channel = _.find(channels, { name: computedMatch.params.name });
 
-    const isProfile = user.name === computedMatch.params.name;
-    if (isProfile) {
-      this.setState({ profile: user });
-    } else {
-      this.setState({ profile: _.find(channels, { name: computedMatch.params.name }) });
+    if (channel) {
+      fetchVideos(channel.id);
     }
   }
 
   render() {
-    const { profile } = this.state;
+    const {
+      user,
+      channels,
+      computedMatch,
+      fetchVideos,
+    } = this.props;
 
-    if (!profile) {
+    const name = computedMatch.params.name;
+    const channel = _.find(channels, { name: computedMatch.params.name });
+
+    if (!channel) {
       return <div />;
     }
 
     return (
-      <Container className="h-100 pr-0" fluid={true}>
-        <Row className="h-100 no-gutters">
+      <Container className="h-100 p-0" fluid={true}>
+        <Row className="h-100 m-0 no-gutters">
           <Col>
-            <Row>Body</Row>
+            <VideoList channel={channel} videos={channel.videos} />
           </Col>
           <Col className="mh-100 border border-top-0 border-right-0 border-bottom-0" xs="2">
             <Card className="rounded-0 border-0">
               <CardBody>
-                <CardTitle>{profile.displayName}</CardTitle>
-                <CardSubtitle>{profile.streaming ? profile.streamInfo.game : 'Offline'}</CardSubtitle>
+                <CardTitle>{channel.displayName}</CardTitle>
+                <CardSubtitle>
+                  <small className="text-muted">{channel.streaming ? channel.streamInfo.game : 'Offline'}</small>
+                </CardSubtitle>
               </CardBody>
-              <CardImg className="rounded-0" src={profile.logo} />
+              <CardImg className="rounded-0" src={channel.logo} />
               <ListGroup flush={true}>
-                <Link className="list-group-item rounded-0" to={`${profile.name}/live`}>Live</Link>
-                <Link className="list-group-item rounded-0" to={`${profile.name}/videos`}>Videos</Link>
-                <Link className="list-group-item rounded-0" to={`${profile.name}/clips`}>Clips</Link>
-                <Link className="list-group-item rounded-0" to={`${profile.name}/followers`}>Followers</Link>
-                <Link className="list-group-item rounded-0" to={`${profile.name}/followed`}>Followed</Link>
+                <Link className="list-group-item rounded-0" to={`${channel.name}/live`}>Live</Link>
+                <Link className="list-group-item rounded-0" to={`${channel.name}/videos`}>Videos</Link>
+                <Link className="list-group-item rounded-0" to={`${channel.name}/clips`}>Clips</Link>
+                <Link className="list-group-item rounded-0" to={`${channel.name}/followers`}>Followers</Link>
+                <Link className="list-group-item rounded-0" to={`${channel.name}/followed`}>Followed</Link>
               </ListGroup>
             </Card>
           </Col>
@@ -101,4 +102,8 @@ const mapStateToProps = ({ root: state }) => ({
   channels: state.channels,
 });
 
-export default connect(mapStateToProps, null)(UserPage);
+const mapDispatchToProps = dispatch => ({
+  fetchVideos: channelId => dispatch(videosAction.request(channelId)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserPage);

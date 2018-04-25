@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import { takeLatest, put, call, select } from 'redux-saga/effects';
 
-import { getUserId } from './selectors';
+import { getToken, getUserId } from './selectors';
 import api from '../lib/api';
 
 import * as ActionType from '../actions';
@@ -61,6 +61,19 @@ function* fetchInitialData(action) {
   }
 }
 
+function* fetchVideos(action) {
+  const { channelId } = action.payload;
+  const accessToken = yield select(getToken);
+
+  try {
+    const res = yield call(api, 'get', `https://api.twitch.tv/kraken/channels/${channelId}/videos`, { accessToken, params: { limit: 12 } });
+    yield put(ActionType.videos.success(channelId, res.data));
+  } catch (e) {
+    yield put(ActionType.videos.failure(e));
+  }
+}
+
 export default function* rootSaga() {
   yield takeLatest(ActionType.INITIAL_DATA.REQUEST, fetchInitialData);
+  yield takeLatest(ActionType.VIDEOS.REQUEST, fetchVideos);
 }

@@ -5,6 +5,17 @@ html, body
 #root
   height: 100%
 
+
+a:global(.card)
+  color: inherit
+  text-decoration: inherit
+  & button
+    z-index: 1
+  &.disabled,
+  &[disabled]
+    pointer-events: none
+    opacity: .8
+
 // ######################################
 
 .container

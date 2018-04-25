@@ -12,6 +12,7 @@ export const INITIAL_DATA = createRequestTypes('INITIAL_DATA');
 export const USER = createRequestTypes('USER');
 export const CHANNELS = createRequestTypes('CHANNELS');
 export const STREAMS = createRequestTypes('STREAMS');
+export const VIDEOS = createRequestTypes('VIDEOS');
 
 export const UPDATE_ACCESS_TOKEN = 'UPDATE_ACCESS_TOKEN';
 
@@ -37,6 +38,12 @@ export const streams = {
   request: token => action(CHANNELS[REQUEST], { token }),
   success: response => action(CHANNELS[SUCCESS], response),
   failure: error => action(CHANNELS[FAILURE], { error }),
+};
+
+export const videos = {
+  request: channelId => action(VIDEOS[REQUEST], { channelId }),
+  success: (channelId, videoList) => action(VIDEOS[SUCCESS], { channelId, videoList }),
+  failure: error => action(VIDEOS[FAILURE], { error }),
 };
 
 export const updateAccessToken = token => action(UPDATE_ACCESS_TOKEN, { token });

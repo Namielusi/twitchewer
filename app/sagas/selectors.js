@@ -1,1 +1,2 @@
-export const getUserId = state => state.root.user.id; // eslint-disable-line
+export const getToken = state => state.root.accessToken;
+export const getUserId = state => state.root.user.id;

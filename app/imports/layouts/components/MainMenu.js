@@ -8,6 +8,7 @@ import { LogIn } from 'react-feather';
 import { pure } from 'recompose';
 import moment from 'moment';
 import classnames from 'classnames';
+import _ from 'lodash';
 
 // import styles from './MainMenu.sass';
 import itemStyles from './MainMenuItem.sass';
@@ -36,14 +37,13 @@ class MainMenu extends Component {
 
     let profileItem;
     if (user.id) {
-      const profileLink = `/user/${user.name}`;
       profileItem = (
         <MainMenuItem
           className={itemStyles.item_profile}
           img={user.logo}
           title={user.displayName}
           description="Go to your profile"
-          url={profileLink}
+          url="/profile"
         />
       );
     } else {
@@ -60,27 +60,30 @@ class MainMenu extends Component {
       );
     }
 
-    const channelListItems = channels.map((channel) => {
-      const classes = classnames({
-        [itemStyles.item_subscribed]: channel.subscribed,
-        [itemStyles.item_streaming]: channel.streaming,
-      });
-      const description = channel.streaming ?
-        'Is streaming now' :
-        `Published ${moment(channel.lastActive).fromNow()}`;
-      const url = `/user/${channel.name}`;
+    const channelListItems = _(channels)
+      .orderBy(['streaming', 'streamInfo.viewers', 'subscribed', 'lastPublish'], ['desc', 'desc', 'desc', 'desc'])
+      .map((channel) => {
+        const classes = classnames({
+          [itemStyles.item_subscribed]: channel.subscribed,
+          [itemStyles.item_streaming]: channel.streaming,
+        });
+        const description = channel.streaming ?
+          'Is streaming now' :
+          `Published ${moment(channel.lastPublish).fromNow()}`;
+        const url = `/user/${channel.name}`;
 
-      return (
-          <MainMenuItem
-            key={channel.id}
-            className={classes}
-            img={channel.logo}
-            title={channel.displayName}
-            description={description}
-            url={url}
-          />
-      );
-    });
+        return (
+            <MainMenuItem
+              key={channel.id}
+              className={classes}
+              img={channel.logo}
+              title={channel.displayName}
+              description={description}
+              url={url}
+            />
+        );
+      })
+      .value();
 
     return (
       <Card className={className}>

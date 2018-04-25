@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import NProgress from 'nprogress';
 import * as ActionType from '../actions';
 
@@ -49,6 +50,18 @@ export default (state = initialState, action) => {
       return {
         ...state,
         channels: action.payload,
+      };
+    }
+
+    case ActionType.VIDEOS.SUCCESS: {
+      const channels = state.channels.slice();
+      const index = _.findIndex(channels, { id: action.payload.channelId });
+
+      channels[index].videos = action.payload.videoList.videos;
+
+      return {
+        ...state,
+        channels,
       };
     }
 
