@@ -57,6 +57,7 @@ export default (state = initialState, action) => {
       const channels = state.channels.slice();
       const index = _.findIndex(channels, { id: action.payload.channelId });
 
+      channels[index].totalVideos = action.payload.videoList._total;
       channels[index].videos = action.payload.videoList.videos;
 
       return {

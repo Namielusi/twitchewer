@@ -7,6 +7,9 @@ import {
   Container,
   Row,
   Col,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
   Card,
   CardImg,
   CardHeader,
@@ -22,9 +25,9 @@ import _ from 'lodash';
 
 import { videos as videosAction } from 'Actions';
 
-import VideoList from '../imports/pages/user/VideoList';
+import VideoList from '../../imports/pages/user/VideoList';
 
-class UserPage extends Component {
+class VideoListPage extends Component {
   static propTypes = {
     user: PropTypes.shape({}),
     channels: PropTypes.array,
@@ -69,8 +72,25 @@ class UserPage extends Component {
 
     return (
       <Container className="h-100 p-0" fluid={true}>
-        <Row className="h-100 m-0 no-gutters">
+        <Row className="mh-100 m-0 no-gutters">
           <Col>
+            <Pagination className="justify-content-center mt-3">
+              <PaginationItem>
+                <PaginationLink previous href="#" />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="1">1</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">2</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">3</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink next href="#" />
+              </PaginationItem>
+            </Pagination>
             <VideoList channel={channel} videos={channel.videos} />
           </Col>
           <Col className="mh-100 border border-top-0 border-right-0 border-bottom-0" xs="2">
@@ -106,4 +126,4 @@ const mapDispatchToProps = dispatch => ({
   fetchVideos: channelId => dispatch(videosAction.request(channelId)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserPage);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoListPage);

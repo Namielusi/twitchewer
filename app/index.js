@@ -17,7 +17,7 @@ import Store from './store';
 
 import Layout from './imports/layouts/Layout';
 import HomePage from './pages/HomePage';
-import UserPage from './pages/UserPage';
+import VideoListPage from './pages/user/VideoListPage';
 import OAuthPage from './pages/OAuthCallback';
 
 // ######################################################
@@ -42,7 +42,8 @@ const AppContainer = () => (
   <ConnectedSwitch>
     <RouteEx exact path="/" component={HomePage} />
     <RouteEx exact path="/oauth" component={OAuthPage} />
-    <RouteEx path="/user/:name" component={UserPage} />
+    <RouteEx path="/user/:name/videos" component={VideoListPage} />
+    <RouteEx path="/user/:name/videos/:page" component={VideoListPage} />
   </ConnectedSwitch>
 );
 
