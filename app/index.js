@@ -1,22 +1,19 @@
-/* eslint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { whyDidYouUpdate } from 'why-did-you-update'; // eslint-disable-line
 
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
-import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
-import storage from 'redux-persist/lib/storage';
 
-import { Route, Switch, Link } from 'react-router-dom';
-import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux';
+import { Route, Switch } from 'react-router-dom';
+import { ConnectedRouter } from 'react-router-redux';
 
 import createHistory from 'history/createBrowserHistory';
 
-import rootReducers from './reducers';
 import 'normalize.css';
 import 'bootstrap/dist/css/bootstrap.css';
+
+import Store from './store';
 
 import Layout from './imports/layouts/Layout';
 import HomePage from './pages/HomePage';
@@ -31,47 +28,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 const history = createHistory();
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  blacklist: ['user', 'channels'],
-};
-
-const persistedReducer = persistReducer(persistConfig, rootReducers);
-
-let store;
-if (process.env.NODE_ENV === 'production') {
-  store = createStore(
-    combineReducers({
-      root: persistedReducer,
-      router: routerReducer,
-    }),
-    applyMiddleware(routerMiddleware(history)),
-  )
-} else {
-  store = createStore(
-    combineReducers({
-      root: persistedReducer,
-      router: routerReducer,
-    }),
-    compose(
-      applyMiddleware(routerMiddleware(history)),
-      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-    ),
-  )
-}
-
-const persistor = persistStore(store);
-
-if (module.hot) {
-  module.hot.accept(() => {
-    const nextRootReducer = require('./reducers'); // eslint-disable-line
-    store.replaceReducer(persistReducer(persistConfig, nextRootReducer));
-  });
-}
+const { store, persistor } = Store(history);
 
 const ConnectedSwitch = connect(state => ({ location: state.router.location }))(Switch);
 
+// eslint-disable-next-line
 const RouteEx = ({ component: Component, ...props }) => {
   const wrapper = () => <Layout><Component {...props}/></Layout>;
   return <Route component={wrapper} {...props}/>;

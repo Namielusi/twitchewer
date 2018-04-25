@@ -1,9 +1,5 @@
-const actionTypes = {
-  updateLoadingAction: 'UPDATE_LOADING',
-  updateAccessToken: 'UPDATE_ACCESS_TOKEN',
-  updateUserInfo: 'UPDATE_USER_INFO',
-  updateChannelListAction: 'UPDATE_CHANNEL_LIST',
-};
+import NProgress from 'nprogress';
+import * as ActionType from '../actions';
 
 const initialState = {
   loading: false,
@@ -18,33 +14,44 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.updateLoadingAction: {
+    case ActionType.INITIAL_DATA.REQUEST: {
+      NProgress.start();
       return {
         ...state,
-        loading: action.payload,
+        loading: true,
       };
     }
-    case actionTypes.updateAccessToken: {
+    case ActionType.INITIAL_DATA.SUCCESS: {
+      NProgress.done();
       return {
         ...state,
-        accessToken: action.payload.token,
+        loading: false,
       };
     }
-    case actionTypes.updateUserInfo: {
+    case ActionType.INITIAL_DATA.FAILURE: {
+      NProgress.done();
+      return state;
+    }
+
+    case ActionType.USER.SUCCESS: {
       return {
         ...state,
         user: {
-          ...state.user,
-          ...action.payload,
+          id: action.payload._id,
+          name: action.payload.name,
+          displayName: action.payload.display_name,
+          logo: action.payload.logo,
         },
       };
     }
-    case actionTypes.updateChannelListAction: {
+
+    case ActionType.CHANNELS.SUCCESS: {
       return {
         ...state,
         channels: action.payload,
       };
     }
+
     default: return state;
   }
 };

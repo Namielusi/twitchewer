@@ -1,19 +1,15 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   ListGroup,
-  ListGroupItem,
-
-  Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle,
+  Card,
 } from 'reactstrap';
 import { LogIn } from 'react-feather';
 import { pure } from 'recompose';
 import moment from 'moment';
 import classnames from 'classnames';
 
-import styles from './MainMenu.sass';
+// import styles from './MainMenu.sass';
 import itemStyles from './MainMenuItem.sass';
 
 import MainMenuItem from './MainMenuItem';
@@ -64,7 +60,7 @@ class MainMenu extends Component {
       );
     }
 
-    const channelListItems = channels.map(channel => {
+    const channelListItems = channels.map((channel) => {
       const classes = classnames({
         [itemStyles.item_subscribed]: channel.subscribed,
         [itemStyles.item_streaming]: channel.streaming,
@@ -93,7 +89,7 @@ class MainMenu extends Component {
           {channelListItems}
         </ListGroup>
       </Card>
-    )
+    );
   }
 }
 

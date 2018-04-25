@@ -1,12 +1,8 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Container,
   Row,
   Col,
-
-  ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText,
 } from 'reactstrap';
 import classnames from 'classnames';
 import { pure } from 'recompose';

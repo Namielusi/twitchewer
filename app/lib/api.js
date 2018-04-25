@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default (method, url, data = {}) => async (accessToken) => {
+export default async (method, url, data = {}) => {
   let tries = 0;
   const send = async () => new Promise((resolve) => {
     try {
@@ -11,7 +11,7 @@ export default (method, url, data = {}) => async (accessToken) => {
         data: data.body || {},
         headers: {
           Accept: 'application/vnd.twitchtv.v5+json',
-          Authorization: `OAuth ${accessToken}`,
+          Authorization: `OAuth ${data.accessToken}`,
           'Client-ID': process.env.CLIENT_ID,
         },
       });
