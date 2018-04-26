@@ -15,6 +15,13 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case ActionType.UPDATE_ACCESS_TOKEN: {
+      return {
+        ...state,
+        accessToken: action.payload.token,
+      };
+    }
+
     case ActionType.INITIAL_DATA.REQUEST: {
       NProgress.start();
       return {

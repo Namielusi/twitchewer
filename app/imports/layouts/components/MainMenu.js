@@ -1,14 +1,13 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  ListGroup,
-  Card,
-} from 'reactstrap';
-import { LogIn } from 'react-feather';
 import { pure } from 'recompose';
-import moment from 'moment';
 import classnames from 'classnames';
+import moment from 'moment';
 import _ from 'lodash';
+
+import { Row, Col, ListGroup, Card } from 'reactstrap';
+import { LogIn, Star } from 'react-feather';
 
 // import styles from './MainMenu.sass';
 import itemStyles from './MainMenuItem.sass';
@@ -64,22 +63,30 @@ class MainMenu extends Component {
       .orderBy(['streaming', 'streamInfo.viewers', 'subscribed', 'lastPublish'], ['desc', 'desc', 'desc', 'desc'])
       .map((channel) => {
         const classes = classnames({
-          [itemStyles.item_subscribed]: channel.subscribed,
           [itemStyles.item_streaming]: channel.streaming,
         });
+        const smallClasses = classnames({
+          'text-muted': !channel.streaming,
+          'text-red': channel.streaming,
+        });
+        const title = (
+          <span>
+            {channel.displayName}
+            { channel.subscribed && <Star className={itemStyles.item__subscribedIcon} /> }
+          </span>
+        );
         const description = channel.streaming ?
-          'Is streaming now' :
+          `Is streaming now — ${channel.streamInfo.viewers}` :
           `Published ${moment(channel.lastPublish).fromNow()}`;
-        const url = channel.streaming ?
-          `/user/${channel.name}` :
-          `/user/${channel.name}/videos`;
+        const url = `/user/${channel.name}`;
 
         return (
             <MainMenuItem
               key={channel.id}
               className={classes}
+              smallClassName={smallClasses}
               img={channel.logo}
-              title={channel.displayName}
+              title={title}
               description={description}
               url={url}
             />

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Container, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
 // import _ from 'lodash';
+
+import { Container, Row, Col } from 'reactstrap';
 
 // import api from 'Lib/api';
 

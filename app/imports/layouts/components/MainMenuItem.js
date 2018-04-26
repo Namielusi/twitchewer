@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Row,
-  Col,
-} from 'reactstrap';
-import classnames from 'classnames';
 import { pure } from 'recompose';
-import Link from 'react-router-dom/Link';
+import classnames from 'classnames';
+
+import { Row, Col } from 'reactstrap';
+import NavLink from 'react-router-dom/NavLink';
 
 import styles from './MainMenuItem.sass';
 
 class MainMenuItem extends Component {
   static propTypes = {
     className: PropTypes.string,
+    smallClassName: PropTypes.string,
     img: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.element,
@@ -25,6 +24,7 @@ class MainMenuItem extends Component {
 
   static defaultProps = {
     className: '',
+    smallClassName: '',
     img: '',
     title: '',
     description: '',
@@ -35,6 +35,7 @@ class MainMenuItem extends Component {
   render() {
     const {
       className,
+      smallClassName,
       img,
       title,
       description,
@@ -43,6 +44,7 @@ class MainMenuItem extends Component {
     } = this.props;
 
     const classes = classnames('list-group-item', 'rounded-0', className);
+    const smallClasses = classnames(styles.small, smallClassName);
 
     const externalProp = external ? { target: '_self' } : {};
     const image = typeof img === 'string' ?
@@ -50,17 +52,17 @@ class MainMenuItem extends Component {
       img;
 
     return (
-      <Link className={classes} to={url} {...externalProp}>
+      <NavLink className={classes} to={url} {...externalProp}>
         <Row className="align-items-center">
           <Col className="text-center" md="3">{image}</Col>
           <Col sm>
             <Row>{title}</Row>
             <Row>
-              <small className={styles.small}>{description}</small>
+              <small className={smallClasses}>{description}</small>
             </Row>
           </Col>
         </Row>
-      </Link>
+      </NavLink>
     );
   }
 }

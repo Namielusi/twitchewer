@@ -4,16 +4,16 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import qs from 'qs';
 
-import { updateAccessToken } from 'Actions';
+import { updateAccessToken as updateAccessTokenAction } from 'Actions';
 
 const OAuthPage = ({
   location,
-  setAccessToken,
+  updateAccessToken,
 }) => {
   const hash = qs.parse(location.hash.slice(1));
 
   if (hash.access_token) {
-    setAccessToken(hash.access_token);
+    updateAccessToken(hash.access_token);
   }
 
   return <Redirect to="/" />;
@@ -21,7 +21,7 @@ const OAuthPage = ({
 
 OAuthPage.propTypes = {
   location: PropTypes.shape({}),
-  setAccessToken: PropTypes.func.isRequired,
+  updateAccessToken: PropTypes.func.isRequired,
 };
 
 OAuthPage.defaultProps = {
@@ -31,7 +31,7 @@ OAuthPage.defaultProps = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setAccessToken: token => dispatch(updateAccessToken(token)),
+  updateAccessToken: token => dispatch(updateAccessTokenAction(token)),
 });
 
 export default connect(null, mapDispatchToProps)(OAuthPage);

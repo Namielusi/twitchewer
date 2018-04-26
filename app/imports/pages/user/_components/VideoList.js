@@ -1,21 +1,21 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { pure } from 'recompose';
+import classnames from 'classnames';
+import _ from 'lodash';
+
 import {
   Container,
   Row,
   Col,
-
   CardDeck,
   Card,
   CardImg,
   CardBody,
   CardTitle,
 } from 'reactstrap';
-import classnames from 'classnames';
-import { pure } from 'recompose';
 import Link from 'react-router-dom/Link';
-import _ from 'lodash';
 
 // import styles from './VideoList.sass';
 

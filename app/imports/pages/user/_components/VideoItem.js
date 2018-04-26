@@ -1,11 +1,14 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { pure } from 'recompose';
+// import classnames from 'classnames';
+import moment from 'moment';
+// import _ from 'lodash';
+
 import {
   Row,
   Col,
   Badge,
-  Card,
   CardImg,
   CardImgOverlay,
   CardBody,
@@ -13,11 +16,7 @@ import {
   CardSubtitle,
   CardFooter,
 } from 'reactstrap';
-import moment from 'moment';
-import classnames from 'classnames';
-import { pure } from 'recompose';
 import Link from 'react-router-dom/Link';
-import _ from 'lodash';
 
 // import styles from './VideoItem.sass';
 
@@ -36,20 +35,20 @@ class VideoItem extends Component {
 
   render() {
     const {
-      channel,
-      video,
+      channel, // eslint-disable-line
+      video, // eslint-disable-line
     } = this.props;
 
     // const cardBadgeClasses = classnames('float-right', styles.video__duration);
 
-    const thumbnail = video.thumbnails && video.thumbnails.medium && video.thumbnails.medium[0] && video.thumbnails.medium[0].url ||
-      video.preview && video.preview.medium ||
+    const thumbnail =
+      (video.thumbnails && video.thumbnails.medium && video.thumbnails.medium[0] &&
+        video.thumbnails.medium[0].url) ||
+      (video.preview && video.preview.medium) ||
       '';
 
     const isRecording = video.status === 'recording' ?
       <small className="text-primary">Recording...</small> : null;
-
-    console.log(moment);
 
     return (
       <Link className="card" to="#">
