@@ -8,6 +8,11 @@ module.exports = {
     'react-hot-loader/patch',
     './app/index.js',
   ],
+  output: {
+    path: `${__dirname}/app/static`,
+    publicPath: '/',
+    filename: 'bundle.js',
+  },
   module: {
     rules: [
       {
@@ -47,11 +52,6 @@ module.exports = {
       Reducers: path.resolve(__dirname, 'app/reducers/'),
       Lib: path.resolve(__dirname, 'app/lib/'),
     },
-  },
-  output: {
-    path: `${__dirname}/app/dist`,
-    publicPath: '/',
-    filename: 'bundle.js',
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

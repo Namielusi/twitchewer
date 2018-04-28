@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { pure } from 'recompose';
 // import classnames from 'classnames';
 import moment from 'moment';
-// import _ from 'lodash';
+import _ from 'lodash';
 
 import {
   Row,
@@ -51,7 +51,7 @@ class VideoItem extends Component {
       <small className="text-primary">Recording...</small> : null;
 
     return (
-      <Link className="card" to="#">
+      <Link className="card" to={`./videos/${_.last(video._id.split('v'))}`}>
         <CardImg src={thumbnail} />
         <CardImgOverlay>
           <CardSubtitle>
