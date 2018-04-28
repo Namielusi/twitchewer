@@ -2,6 +2,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Parser } from 'm3u8-parser';
+import axios from 'axios';
+import qs from 'qs';
 import _ from 'lodash';
 
 import {
@@ -24,10 +27,11 @@ import {
 } from 'reactstrap';
 import Link from 'react-router-dom/Link';
 
+import api from 'Lib/api';
 import { videos as videosAction } from 'Actions';
 
 import UserLayout from '../../imports/pages/user/UserLayout';
-// import VideoList from '../../imports/pages/user/_components/VideoList';
+import VideoPlayer from '../../imports/ui/VideoPlayer';
 
 class VideoListPage extends Component {
   static propTypes = {
@@ -40,11 +44,16 @@ class VideoListPage extends Component {
     channels: {},
   }
 
-  static async fetchData(location, store) {
+  constructor() {
+    super();
 
+    this.state = {
+      token: null,
+      sid: null,
+    }
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     const {
       channels,
       computedMatch,
@@ -54,10 +63,59 @@ class VideoListPage extends Component {
 
     if (channel) {
       fetchVideos(channel.id);
+
+      if (channel.streaming) {
+        const { data: liveTokens } = await api('get', '/proxy/api/channels/overwatchleague/access_token', {
+          accessToken: 'nqq61e77vjykafyhxnf6nutao9y2h5',
+        });
+
+        const res = await axios({
+          method: 'GET',
+          url: '/usher/api/channel/hls/overwatchleague.m3u8',
+          params: {
+            player: 'twitchweb',
+            token: liveTokens.token,
+            sig: liveTokens.sig,
+            allow_audio_only: true,
+            allow_source: true,
+            type: 'any',
+            p: _.random(100000, 999999),
+          },
+          headers: {
+            'Content-type': 'application/vnd.apple.mpegurl',
+          }
+        });
+
+        const parser = new Parser();
+
+        parser.push(res.data);
+        parser.end();
+
+        const sources = [];
+        parser.manifest.playlists.map((source) => {
+          const { attributes, uri } = source;
+
+          if (attributes.VIDEO === 'audio_only') { return; }
+          sources.push({
+            src: uri,
+            resolution: attributes.RESOLUTION,
+            label: attributes.VIDEO === 'chunked' ? 'source' : attributes.VIDEO,
+          });
+        });
+
+        // console.log(sources);
+
+        this.setState({
+          sources: sources,
+        });
+      }
     }
   }
 
   render() {
+    const {
+      sources,
+    } = this.state;
     const {
       user,
       channels,
@@ -72,56 +130,16 @@ class VideoListPage extends Component {
       return <div />;
     }
 
+    let player;
+    if (sources) {
+      player = <VideoPlayer src={sources.map(item => ({ ...item, type: 'application/x-mpegURL' }))} />;
+    }
+
     return (
       <UserLayout channel={channel}>
-        Live page
+        {player}
       </UserLayout>
     );
-
-    // return (
-    //   <Container className="h-100 p-0" fluid={true}>
-    //     <Row className="h-100 m-0 no-gutters">
-    //       <Col className="mh-100" style={{ overflow: 'auto' }}>
-    //         <Pagination className="justify-content-center mt-3">
-    //           <PaginationItem disabled>
-    //             <PaginationLink previous href="#" />
-    //           </PaginationItem>
-    //           <PaginationItem active>
-    //             <PaginationLink href="1">1</PaginationLink>
-    //           </PaginationItem>
-    //           <PaginationItem>
-    //             <PaginationLink href="#">2</PaginationLink>
-    //           </PaginationItem>
-    //           <PaginationItem>
-    //             <PaginationLink href="#">3</PaginationLink>
-    //           </PaginationItem>
-    //           <PaginationItem>
-    //             <PaginationLink next href="#" />
-    //           </PaginationItem>
-    //         </Pagination>
-    //         <VideoList channel={channel} videos={channel.videos} />
-    //       </Col>
-    //       <Col className="mh-100 border border-top-0 border-right-0 border-bottom-0" xs="2" style={{ overflow: 'auto' }}>
-    //         <Card className="rounded-0 border-0">
-    //           <CardBody>
-    //             <CardTitle>{channel.displayName}</CardTitle>
-    //             <CardSubtitle>
-    //               <small className="text-muted">{channel.streaming ? channel.streamInfo.game : 'Offline'}</small>
-    //             </CardSubtitle>
-    //           </CardBody>
-    //           <CardImg className="rounded-0" src={channel.logo} />
-    //           <ListGroup flush={true}>
-    //             <Link className="list-group-item rounded-0" to={`${channel.name}/live`}>Live</Link>
-    //             <Link className="list-group-item rounded-0" to={`${channel.name}/videos`}>Videos</Link>
-    //             <Link className="list-group-item rounded-0" to={`${channel.name}/clips`}>Clips</Link>
-    //             <Link className="list-group-item rounded-0" to={`${channel.name}/followers`}>Followers</Link>
-    //             <Link className="list-group-item rounded-0" to={`${channel.name}/followed`}>Followed</Link>
-    //           </ListGroup>
-    //         </Card>
-    //       </Col>
-    //     </Row>
-    //   </Container>
-    // );
   }
 }
 

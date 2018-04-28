@@ -34,6 +34,10 @@ module.exports = {
           },
         }, 'postcss-loader', 'sass-loader'],
       },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        loader: 'url-loader?limit=100000',
+      },
     ],
   },
   resolve: {
@@ -56,8 +60,21 @@ module.exports = {
   devtool: 'source-map',
   devServer: {
     contentBase: './app/static',
+    overlay: true,
     hot: true,
     historyApiFallback: true,
     port: 3000,
+    proxy: {
+      '/proxy': {
+        target: 'http://api.twitch.tv',
+        changeOrigin: true,
+        pathRewrite: { '^/proxy': '' },
+      },
+      '/usher': {
+        target: 'http://usher.twitch.tv',
+        changeOrigin: true,
+        pathRewrite: { '^/usher': '' },
+      },
+    },
   },
 };

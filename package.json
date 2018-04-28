@@ -26,6 +26,7 @@
     "history": "^4.7.2",
     "jquery": "^3.3.1",
     "lodash": "^4.17.5",
+    "m3u8-parser": "^4.2.0",
     "moment": "^2.22.1",
     "normalize.css": "^8.0.0",
     "nprogress": "^0.2.0",
@@ -42,7 +43,10 @@
     "recompose": "^0.27.0",
     "redux": "^4.0.0",
     "redux-persist": "^5.9.1",
-    "redux-saga": "^0.16.0"
+    "redux-saga": "^0.16.0",
+    "silvermine-videojs-quality-selector": "^1.1.2",
+    "video.js": "^6.8.0",
+    "videojs-contrib-hls": "^5.14.1"
   },
   "devDependencies": {
     "autoprefixer": "^8.3.0",
@@ -67,6 +71,7 @@
     "react-hot-loader": "^4.0.1",
     "sass-loader": "^7.0.1",
     "style-loader": "^0.21.0",
+    "url-loader": "^1.0.1",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.14",
     "webpack-dev-server": "^3.1.3",
