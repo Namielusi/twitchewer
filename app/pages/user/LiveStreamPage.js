@@ -65,13 +65,13 @@ class VideoListPage extends Component {
       fetchVideos(channel.id);
 
       if (channel.streaming) {
-        const { data: liveTokens } = await api('get', '/proxy/api/channels/overwatchleague/access_token', {
+        const { data: liveTokens } = await api('get', `/proxy/api/channels/${channels.name}/access_token`, {
           accessToken: 'nqq61e77vjykafyhxnf6nutao9y2h5',
         });
 
         const res = await axios({
           method: 'GET',
-          url: '/usher/api/channel/hls/overwatchleague.m3u8',
+          url: `/usher/api/channel/hls/${channels.name}.m3u8`,
           params: {
             player: 'twitchweb',
             token: liveTokens.token,
