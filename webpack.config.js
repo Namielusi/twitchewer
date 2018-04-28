@@ -1,7 +1,10 @@
+const path = require('path');
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: [
+    'babel-polyfill',
     'react-hot-loader/patch',
     './app/index.js',
   ],
@@ -35,6 +38,11 @@ module.exports = {
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
+    alias: {
+      Actions: path.resolve(__dirname, 'app/actions/'),
+      Reducers: path.resolve(__dirname, 'app/reducers/'),
+      Lib: path.resolve(__dirname, 'app/lib/'),
+    },
   },
   output: {
     path: `${__dirname}/app/dist`,
@@ -43,9 +51,13 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new Dotenv(),
   ],
+  devtool: 'source-map',
   devServer: {
     contentBase: './app/static',
     hot: true,
+    historyApiFallback: true,
+    port: 3000,
   },
 };

@@ -1,11 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-// import { updateUserAction } from '../actions';
+// import { updateUserInfoAction } from '../actions';
 
+// import Layout from '../imports/layouts/Layout';
 import WelcomeMessage from '../imports/pages/home/WelcomeMessage';
 
-const Home = () => (<WelcomeMessage />);
+const HomePage = () => (
+  <WelcomeMessage />
+);
 
 // class Home extends Component {
 //   static propTypes = {
@@ -28,8 +31,8 @@ const Home = () => (<WelcomeMessage />);
 // });
 //
 // const mapDispatchToProps = dispatch => ({
-//   updateUser: args => dispatch(updateUserAction(args)),
+//   updateUser: args => dispatch(updateUserInfoAction(args)),
 // });
 //
 // export default connect(mapStateToProps, mapDispatchToProps)(Home);
-export default connect(null, null)(Home);
+export default connect(null, null)(HomePage);

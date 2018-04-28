@@ -1,32 +1,78 @@
-const actionTypes = {
-  updateUser: 'UPDATE_USER',
-  updateUserSubscriptions: 'UPDATE_USER_SUBSCRIPTIONS',
-};
+import _ from 'lodash';
+import NProgress from 'nprogress';
+import * as ActionType from '../actions';
 
 const initialState = {
+  loading: false,
+  accessToken: null,
   user: {
     id: null,
+    name: null,
+    displayName: null,
   },
-  subscriptions: [],
+  channels: [],
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.updateUser: {
+    case ActionType.UPDATE_ACCESS_TOKEN: {
+      return {
+        ...state,
+        accessToken: action.payload.token,
+      };
+    }
+
+    case ActionType.INITIAL_DATA.REQUEST: {
+      NProgress.start();
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case ActionType.INITIAL_DATA.SUCCESS: {
+      NProgress.done();
+      return {
+        ...state,
+        loading: false,
+      };
+    }
+    case ActionType.INITIAL_DATA.FAILURE: {
+      NProgress.done();
+      return state;
+    }
+
+    case ActionType.USER.SUCCESS: {
       return {
         ...state,
         user: {
-          ...state.user,
-          ...action.payload,
+          id: action.payload._id,
+          name: action.payload.name,
+          displayName: action.payload.display_name,
+          logo: action.payload.logo,
         },
       };
     }
-    case actionTypes.updateUserSubscriptions: {
+
+    case ActionType.CHANNELS.SUCCESS: {
       return {
         ...state,
-        subscriptions: action.payload,
+        channels: action.payload,
       };
     }
+
+    case ActionType.VIDEOS.SUCCESS: {
+      const channels = state.channels.slice();
+      const index = _.findIndex(channels, { id: action.payload.channelId });
+
+      channels[index].totalVideos = action.payload.videoList._total;
+      channels[index].videos = action.payload.videoList.videos;
+
+      return {
+        ...state,
+        channels,
+      };
+    }
+
     default: return state;
   }
 };

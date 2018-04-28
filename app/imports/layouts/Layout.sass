@@ -2,11 +2,31 @@ html, body
   height: 100%
   font-family: Helvetica
 
-.wrapper
-  display: flex
+#root
   height: 100%
 
+
+a:global(.card)
+  color: inherit
+  text-decoration: inherit
+  & button
+    z-index: 1
+  &.disabled,
+  &[disabled]
+    pointer-events: none
+    opacity: .8
+
+// ######################################
+
 .container
-  flex-grow: 1
+  padding: 0
+
+
+.leftBar
+  max-height: 100%
   overflow-y: auto
   overflow-x: hidden
+
+.body
+  max-height: 100%
+  // overflow: auto
