@@ -28,7 +28,7 @@ import {
 import Link from 'react-router-dom/Link';
 
 import api from 'Lib/api';
-import { videos as videosAction } from 'Actions';
+import { streamSources as streamSourcesAction } from 'Actions';
 
 import UserLayout from '../../imports/pages/user/UserLayout';
 import VideoPlayer from '../../imports/ui/VideoPlayer';
@@ -47,109 +47,52 @@ class VideoListPage extends Component {
   constructor() {
     super();
 
-    this.state = {
-      token: null,
-      sid: null,
-    }
+    // this.state = {
+    //   token: null,
+    //   sid: null,
+    // }
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     const {
-      channels,
-      computedMatch,
-      fetchVideos,
+      match,
+      channel,
+      fetchSources,
     } = this.props;
-    const channel = _.find(channels, { name: computedMatch.params.name });
 
-    if (channel) {
-      fetchVideos(channel.id);
-
-      if (channel.streaming) {
-        const { data: liveTokens } = await api('get', `/proxy/api/channels/${channel.name}/access_token`, {
-          accessToken: 'nqq61e77vjykafyhxnf6nutao9y2h5',
-        });
-
-        const res = await axios({
-          method: 'GET',
-          url: `/proxy/usher/api/channel/hls/${channel.name}.m3u8`,
-          params: {
-            player: 'twitchweb',
-            token: liveTokens.token,
-            sig: liveTokens.sig,
-            allow_audio_only: true,
-            allow_source: true,
-            type: 'any',
-            p: _.random(100000, 999999),
-          },
-          headers: {
-            'Content-type': 'application/vnd.apple.mpegurl',
-          }
-        });
-
-        const parser = new Parser();
-
-        parser.push(res.data);
-        parser.end();
-
-        const sources = [];
-        parser.manifest.playlists.map((source) => {
-          const { attributes, uri } = source;
-
-          if (attributes.VIDEO === 'audio_only') { return; }
-          sources.push({
-            src: uri,
-            resolution: attributes.RESOLUTION,
-            label: attributes.VIDEO === 'chunked' ? 'source' : attributes.VIDEO,
-          });
-        });
-
-        // console.log(sources);
-
-        this.setState({
-          sources: sources,
-        });
-      }
+    if (channel && channel.streaming) {
+      fetchSources(match.params.name);
     }
   }
 
   render() {
     const {
-      sources,
-    } = this.state;
-    const {
       user,
-      channels,
-      computedMatch,
-      fetchVideos,
+      channel,
     } = this.props;
-
-    const name = computedMatch.params.name;
-    const channel = _.find(channels, { name: computedMatch.params.name });
 
     if (!channel) {
       return <div />;
     }
 
-    let player;
-    if (sources) {
-      player = <VideoPlayer src={sources.map(item => ({ ...item, type: 'application/x-mpegURL' }))} />;
-    }
+    // const sources = (channel.streamInfo.sources || [])
+    //   .map(item => ({ ...item, type: 'application/x-mpegURL' }));
 
     return (
       <UserLayout channel={channel}>
-        {player}
+        {/* <VideoPlayer src={sources} /> */}
       </UserLayout>
     );
   }
 }
 
-const mapStateToProps = ({ root: state }) => ({
+const mapStateToProps = ({ root: state }, props) => ({
   user: state.user,
-  channels: state.channels,
+  channel: _.find(state.channels, { name: props.match.params.name }),
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchVideos: channelId => dispatch(videosAction.request(channelId)),
+  fetchSources: channelName => dispatch(streamSourcesAction.request(channelName)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VideoListPage);

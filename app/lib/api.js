@@ -13,6 +13,7 @@ export default async (method, url, data = {}) => {
           Accept: 'application/vnd.twitchtv.v5+json',
           Authorization: `OAuth ${data.accessToken}`,
           'Client-ID': process.env.CLIENT_ID,
+          ...data.headers,
         },
       });
       resolve(res);

@@ -35,9 +35,9 @@ const { store, persistor } = Store(history);
 const ConnectedSwitch = connect(state => ({ location: state.router.location }))(Switch);
 
 // eslint-disable-next-line
-const RouteEx = ({ component: Component, ...props }) => {
-  const wrapper = () => <Layout><Component {...props}/></Layout>;
-  return <Route component={wrapper} {...props}/>;
+const RouteEx = ({ component, ...props }) => {
+  const wrapper = () => <Layout component={component} />;
+  return <Route {...props} component={wrapper} />;
 };
 
 const AppContainer = () => (
@@ -46,7 +46,6 @@ const AppContainer = () => (
     <RouteEx exact path="/oauth" component={OAuthPage} />
     <RouteEx exact path="/user/:name" component={LiveStreamPage} />
     <RouteEx exact path="/user/:name/videos" component={VideoListPage} />
-    {/* <RouteEx path="/user/:name/videos/:page" component={VideoListPage} /> */}
     <RouteEx exact path="/user/:name/videos/:id" component={VideoPage} />
   </ConnectedSwitch>
 );

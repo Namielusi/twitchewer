@@ -6,10 +6,7 @@ import qs from 'qs';
 
 import { updateAccessToken as updateAccessTokenAction } from 'Actions';
 
-const OAuthPage = ({
-  location,
-  updateAccessToken,
-}) => {
+const OAuthPage = ({ location, updateAccessToken }) => {
   const hash = qs.parse(location.hash.slice(1));
 
   if (hash.access_token) {

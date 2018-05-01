@@ -78,7 +78,9 @@ class MainMenu extends Component {
         const description = channel.streaming ?
           `Is streaming now — ${channel.streamInfo.viewers}` :
           `Published ${moment(channel.lastPublish).fromNow()}`;
-        const url = `/user/${channel.name}`;
+        const url = channel.streaming ?
+          `/user/${channel.name}` :
+          `/user/${channel.name}/videos`;
 
         return (
             <MainMenuItem

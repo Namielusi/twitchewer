@@ -11,7 +11,7 @@ const action = (type, payload = {}) => ({ type, payload });
 export const INITIAL_DATA = createRequestTypes('INITIAL_DATA');
 export const USER = createRequestTypes('USER');
 export const CHANNELS = createRequestTypes('CHANNELS');
-export const STREAMS = createRequestTypes('STREAMS');
+export const STREAM_SOURCES = createRequestTypes('STREAM_SOURCES');
 export const VIDEOS = createRequestTypes('VIDEOS');
 
 export const UPDATE_ACCESS_TOKEN = 'UPDATE_ACCESS_TOKEN';
@@ -34,10 +34,10 @@ export const channels = {
   failure: error => action(CHANNELS[FAILURE], { error }),
 };
 
-export const streams = {
-  request: token => action(CHANNELS[REQUEST], { token }),
-  success: response => action(CHANNELS[SUCCESS], response),
-  failure: error => action(CHANNELS[FAILURE], { error }),
+export const streamSources = {
+  request: channelName => action(STREAM_SOURCES[REQUEST], { channelName }),
+  success: (channelName, response) => action(STREAM_SOURCES[SUCCESS], { channelName, response }),
+  failure: error => action(STREAM_SOURCES[FAILURE], { error }),
 };
 
 export const videos = {

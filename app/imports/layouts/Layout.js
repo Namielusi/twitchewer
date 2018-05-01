@@ -18,12 +18,14 @@ import MainMenu from './components/MainMenu';
 
 class Layout extends Component {
   static propTypes = {
+    component: PropTypes.element.isRequired,
     history: PropTypes.shape({}).isRequired,
+    location: PropTypes.shape({}).isRequired,
+    match: PropTypes.shape({}).isRequired,
     loading: PropTypes.bool,
     accessToken: PropTypes.string,
     user: PropTypes.shape({}),
     channels: PropTypes.array,
-    children: PropTypes.element.isRequired,
   }
 
   static defaultProps = {
@@ -47,10 +49,13 @@ class Layout extends Component {
 
   render() {
     const {
+      component: ChildComponent,
+      history,
+      location,
+      match,
       loading,
       user,
       channels,
-      children,
     } = this.props;
 
     if (loading) {
@@ -65,7 +70,9 @@ class Layout extends Component {
           <Col className={styles.leftBar} xs="2">
             <MainMenu className="h-100 rounded-0 border-left-0 border-top-0 border-bottom-0" user={user} channels={channels} />
           </Col>
-          <Col className={styles.body}>{children}</Col>
+          <Col className={styles.body}>
+            <ChildComponent history={history} location={location} match={match} />
+          </Col>
         </Row>
       </Container>
     );
