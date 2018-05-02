@@ -28,87 +28,79 @@ import {
 import Link from 'react-router-dom/Link';
 
 import api from 'Lib/api';
-import { videos as videosAction } from 'Actions';
+import { video as videoAction } from 'Actions';
 
 import UserLayout from '../../imports/pages/user/UserLayout';
 import VideoPlayer from '../../imports/ui/VideoPlayer';
 
-class VideoListPage extends Component {
+class VideoPage extends Component {
   static propTypes = {
     user: PropTypes.shape({}),
-    channels: PropTypes.array,
+    channel: PropTypes.shape({}),
+    video: PropTypes.shape({}),
   }
 
   static defaultProps = {
     user: {},
-    channels: {},
-  }
-
-  constructor() {
-    super();
-
-    this.state = {
-      token: null,
-      sid: null,
-    }
+    channel: {},
+    video: {},
   }
 
   async componentWillMount() {
     const {
-      channels,
-      computedMatch,
-      fetchVideos,
+      channel,
+      video,
+      fetchVideo,
     } = this.props;
-    const channel = _.find(channels, { name: computedMatch.params.name });
 
     if (channel) {
-      fetchVideos(channel.id);
+      fetchVideo(channel.name, video.id);
 
-      const { data: liveTokens } = await api('get', `/proxy/api/vods/${computedMatch.params.id}/access_token`, {
-        accessToken: 'nqq61e77vjykafyhxnf6nutao9y2h5',
-      });
-
-      const res = await axios({
-        method: 'GET',
-        url: `/proxy/usher/vod/${computedMatch.params.id}`,
-        params: {
-          // player: 'twitchweb',
-          nauth: liveTokens.token,
-          nauthsig: liveTokens.sig,
-          // allow_audio_only: true,
-          // allow_source: true,
-          // type: 'any',
-          // p: _.random(100000, 999999),
-        },
-        headers: {
-          'Content-type': 'application/vnd.apple.mpegurl',
-        }
-      });
-
-      const parser = new Parser();
-
-      parser.push(res.data);
-      parser.end();
-
-      console.log(parser);
-
-      const sources = [];
-      parser.manifest.playlists.map((source) => {
-        const { attributes, uri } = source;
-
-        if (attributes.VIDEO === 'audio_only') { return; }
-        sources.push({
-          src: `/proxy/video?url=${uri}`,
-          resolution: attributes.RESOLUTION,
-          label: attributes.VIDEO === 'chunked' ? 'source' : attributes.VIDEO,
-        });
-      });
-
-      console.log(sources);
-
-      this.setState({
-        sources: sources,
-      });
+      // const { data: liveTokens } = await api('get', `/proxy/api/vods/${computedMatch.params.id}/access_token`, {
+      //   accessToken: 'nqq61e77vjykafyhxnf6nutao9y2h5',
+      // });
+      //
+      // const res = await axios({
+      //   method: 'GET',
+      //   url: `/proxy/usher/vod/${computedMatch.params.id}`,
+      //   params: {
+      //     // player: 'twitchweb',
+      //     nauth: liveTokens.token,
+      //     nauthsig: liveTokens.sig,
+      //     // allow_audio_only: true,
+      //     // allow_source: true,
+      //     // type: 'any',
+      //     // p: _.random(100000, 999999),
+      //   },
+      //   headers: {
+      //     'Content-type': 'application/vnd.apple.mpegurl',
+      //   }
+      // });
+      //
+      // const parser = new Parser();
+      //
+      // parser.push(res.data);
+      // parser.end();
+      //
+      // console.log(parser);
+      //
+      // const sources = [];
+      // parser.manifest.playlists.map((source) => {
+      //   const { attributes, uri } = source;
+      //
+      //   if (attributes.VIDEO === 'audio_only') { return; }
+      //   sources.push({
+      //     src: `/proxy/video?url=${uri}`,
+      //     resolution: attributes.RESOLUTION,
+      //     label: attributes.VIDEO === 'chunked' ? 'source' : attributes.VIDEO,
+      //   });
+      // });
+      //
+      // console.log(sources);
+      //
+      // this.setState({
+      //   sources: sources,
+      // });
     }
   }
 
@@ -118,38 +110,40 @@ class VideoListPage extends Component {
     } = this.state;
     const {
       user,
-      channels,
-      computedMatch,
-      fetchVideos,
+      channel,
+      video,
     } = this.props;
-
-    const name = computedMatch.params.name;
-    const channel = _.find(channels, { name: computedMatch.params.name });
 
     if (!channel) {
       return <div />;
     }
 
-    let player;
-    if (sources) {
-      player = <VideoPlayer src={sources.map(item => ({ ...item, type: 'application/x-mpegURL' }))} />;
-    }
+    // let player;
+    // if (sources) {
+    //   player = <VideoPlayer src={sources.map(item => ({ ...item, type: 'application/x-mpegURL' }))} />;
+    // }
 
     return (
       <UserLayout channel={channel}>
-        {player}
+        Body
+        {/* {player} */}
       </UserLayout>
     );
   }
 }
 
-const mapStateToProps = ({ root: state }) => ({
-  user: state.user,
-  channels: state.channels,
-});
+const mapStateToProps = ({ root: state }, props) => {
+  const channel = _.find(state.channels, { name: props.match.params.name });
+
+  return {
+    user: state.user,
+    channel,
+    video: _.find(channel, { id: props.match.params.id }),
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
-  fetchVideos: channelId => dispatch(videosAction.request(channelId)),
+  fetchVideo: (channelName, vodId) => dispatch(videoAction.request(channelName, vodId)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(VideoListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoPage);

@@ -68,7 +68,20 @@ export default (state = initialState, action) => {
 
       channels[index].streamInfo.sources = sources;
 
-      console.log('CHANGED');
+      return {
+        ...state,
+        channels,
+      };
+    }
+
+    case ActionType.VIDEO_LIST.SUCCESS: {
+      const { channelId, list } = action.payload;
+
+      const channels = state.channels.slice();
+      const index = _.findIndex(channels, { id: channelId });
+
+      channels[index].totalVideos = list._total;
+      channels[index].videos = list.videos;
 
       return {
         ...state,
@@ -76,12 +89,14 @@ export default (state = initialState, action) => {
       };
     }
 
-    case ActionType.VIDEOS.SUCCESS: {
-      const channels = state.channels.slice();
-      const index = _.findIndex(channels, { id: action.payload.channelId });
+    case ActionType.VIDEO.SUCCESS: {
+      const { id, channelName, sources } = action.payload;
 
-      channels[index].totalVideos = action.payload.videoList._total;
-      channels[index].videos = action.payload.videoList.videos;
+      const channels = state.channels.slice();
+      const channelIndex = _.findIndex(channels, { name: channelName });
+      const videoIndex = _.findIndex(channels[channelIndex], { id });
+
+      channels[channelIndex].videos[videoIndex].sources = sources;
 
       return {
         ...state,

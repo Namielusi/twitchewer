@@ -1,18 +1,54 @@
+import _ from 'lodash';
 import { put, call, select } from 'redux-saga/effects';
+import { Parser } from 'm3u8-parser';
 
 import { getToken } from '../selectors';
 import api from '../../lib/api';
 
 import * as ActionType from '../../actions';
 
-export default function* fetchVideos(action) {
-  const { channelId } = action.payload;
+export default function* fetchStreamSources(action) {
+  const { channelName, id } = action.payload;
   const accessToken = yield select(getToken);
 
   try {
-    const res = yield call(api, 'get', `https://api.twitch.tv/kraken/channels/${channelId}/videos`, { accessToken, params: { limit: 16 } });
-    yield put(ActionType.videos.success(channelId, res.data));
+    const { data: tokens } = yield call(api, 'get', `/proxy/api/vods/${id}/access_token`, { accessToken });
+
+    const sourcesRaw = yield call(api, 'get', `/proxy/usher/api/channel/hls/${channelName}.m3u8`, {
+      accessToken,
+      params: {
+        player: 'twitchweb',
+        token: tokens.token,
+        sig: tokens.sig,
+        allow_audio_only: true,
+        allow_source: true,
+        type: 'any',
+        p: _.random(100000, 999999),
+      },
+      headers: {
+        Accept: null,
+      },
+    });
+
+    const parser = new Parser();
+    parser.push(sourcesRaw.data);
+    parser.end();
+
+    const sources = [];
+    parser.manifest.playlists.forEach((source) => {
+      const { attributes, uri } = source;
+
+      if (attributes.VIDEO === 'audio_only') { return; }
+      sources.push({
+        src: uri,
+        resolution: attributes.RESOLUTION,
+        label: attributes.VIDEO === 'chunked' ? 'source' : attributes.VIDEO,
+        sources: [],
+      });
+    });
+
+    yield put(ActionType.video.success(id, channelName, sources));
   } catch (e) {
-    yield put(ActionType.videos.failure(e));
+    yield put(ActionType.video.failure(e));
   }
 }

@@ -24,7 +24,7 @@ import {
 } from 'reactstrap';
 import Link from 'react-router-dom/Link';
 
-import { videos as videosAction } from 'Actions';
+import { videoList as videoListAction } from 'Actions';
 
 import UserLayout from '../../imports/pages/user/UserLayout';
 import VideoList from '../../imports/pages/user/_components/VideoList';
@@ -32,41 +32,30 @@ import VideoList from '../../imports/pages/user/_components/VideoList';
 class VideoListPage extends Component {
   static propTypes = {
     user: PropTypes.shape({}),
-    channels: PropTypes.array,
+    channel: PropTypes.shape({}),
   }
 
   static defaultProps = {
     user: {},
-    channels: {},
-  }
-
-  static async fetchData(location, store) {
-
+    channel: {},
   }
 
   componentWillMount() {
     const {
-      channels,
-      computedMatch,
-      fetchVideos,
+      channel,
+      fetchVideoList,
     } = this.props;
-    const channel = _.find(channels, { name: computedMatch.params.name });
 
     if (channel) {
-      fetchVideos(channel.id);
+      fetchVideoList(channel.id);
     }
   }
 
   render() {
     const {
       user,
-      channels,
-      computedMatch,
-      fetchVideos,
+      channel,
     } = this.props;
-
-    const name = computedMatch.params.name;
-    const channel = _.find(channels, { name: computedMatch.params.name });
 
     if (!channel) {
       return <div />;
@@ -97,13 +86,13 @@ class VideoListPage extends Component {
   }
 }
 
-const mapStateToProps = ({ root: state }) => ({
+const mapStateToProps = ({ root: state }, props) => ({
   user: state.user,
-  channels: state.channels,
+  channel: _.find(state.channels, { name: props.match.params.name }),
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchVideos: channelId => dispatch(videosAction.request(channelId)),
+  fetchVideoList: channelId => dispatch(videoListAction.request(channelId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VideoListPage);
