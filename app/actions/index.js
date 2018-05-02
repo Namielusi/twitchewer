@@ -36,7 +36,7 @@ export const channels = {
 
 export const streamSources = {
   request: channelName => action(STREAM_SOURCES[REQUEST], { channelName }),
-  success: (channelName, response) => action(STREAM_SOURCES[SUCCESS], { channelName, response }),
+  success: (channelName, sources) => action(STREAM_SOURCES[SUCCESS], { channelName, sources }),
   failure: error => action(STREAM_SOURCES[FAILURE], { error }),
 };
 

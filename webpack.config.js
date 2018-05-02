@@ -65,15 +65,20 @@ module.exports = {
     historyApiFallback: true,
     port: 3000,
     proxy: {
-      '/proxy': {
+      '/proxy/api': {
         target: 'http://api.twitch.tv',
         changeOrigin: true,
-        pathRewrite: { '^/proxy': '' },
+        pathRewrite: { '^/proxy/api': '/api' },
       },
-      '/usher': {
+      '/proxy/usher': {
         target: 'http://usher.twitch.tv',
         changeOrigin: true,
-        pathRewrite: { '^/usher': '' },
+        pathRewrite: { '^/proxy/usher': '' },
+      },
+      '/proxy/vod': {
+        target: 'https://vod-metro.twitch.tv',
+        changeOrigin: true,
+        pathRewrite: { '^/proxy/vod': '' },
       },
     },
   },

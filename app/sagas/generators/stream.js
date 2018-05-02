@@ -26,7 +26,7 @@ export default function* fetchStreamSources(action) {
         p: _.random(100000, 999999),
       },
       headers: {
-        Authorization: null,
+        Accept: null,
       },
     });
 

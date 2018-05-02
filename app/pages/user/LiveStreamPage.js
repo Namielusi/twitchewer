@@ -33,7 +33,7 @@ import { streamSources as streamSourcesAction } from 'Actions';
 import UserLayout from '../../imports/pages/user/UserLayout';
 import VideoPlayer from '../../imports/ui/VideoPlayer';
 
-class VideoListPage extends Component {
+class LiveStreamPage extends Component {
   static propTypes = {
     user: PropTypes.shape({}),
     channels: PropTypes.array,
@@ -42,15 +42,6 @@ class VideoListPage extends Component {
   static defaultProps = {
     user: {},
     channels: {},
-  }
-
-  constructor() {
-    super();
-
-    // this.state = {
-    //   token: null,
-    //   sid: null,
-    // }
   }
 
   componentWillMount() {
@@ -71,28 +62,43 @@ class VideoListPage extends Component {
       channel,
     } = this.props;
 
+    console.log(channel && channel.streamInfo && channel.streamInfo.sources);
+
     if (!channel) {
       return <div />;
     }
 
-    // const sources = (channel.streamInfo.sources || [])
-    //   .map(item => ({ ...item, type: 'application/x-mpegURL' }));
+    let player;
+    if (channel.streamInfo.sources) {
+      const sources = (channel.streamInfo.sources || [])
+        .map(item => ({ ...item, type: 'application/x-mpegURL' }));
+
+      player = <VideoPlayer className="w-100 h-75" src={sources} />;
+    }
 
     return (
       <UserLayout channel={channel}>
-        {/* <VideoPlayer src={sources} /> */}
+        <Col className="h-100">
+          <Row className="h-75">{player}</Row>
+          <Row>Bottom</Row>
+        </Col>
       </UserLayout>
     );
   }
 }
 
-const mapStateToProps = ({ root: state }, props) => ({
-  user: state.user,
-  channel: _.find(state.channels, { name: props.match.params.name }),
-});
+const mapStateToProps = ({ root: state }, props) => {
+  const channel = _.find(state.channels, { name: props.match.params.name });
+
+  return {
+    user: state.user,
+    channel,
+    sources: channel && channel.streamInfo && channel.streamInfo.sources,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   fetchSources: channelName => dispatch(streamSourcesAction.request(channelName)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(VideoListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(LiveStreamPage);

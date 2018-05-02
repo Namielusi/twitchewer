@@ -60,6 +60,22 @@ export default (state = initialState, action) => {
       };
     }
 
+    case ActionType.STREAM_SOURCES.SUCCESS: {
+      const { channelName, sources } = action.payload;
+
+      const channels = state.channels.slice();
+      const index = _.findIndex(channels, { name: channelName });
+
+      channels[index].streamInfo.sources = sources;
+
+      console.log('CHANGED');
+
+      return {
+        ...state,
+        channels,
+      };
+    }
+
     case ActionType.VIDEOS.SUCCESS: {
       const channels = state.channels.slice();
       const index = _.findIndex(channels, { id: action.payload.channelId });

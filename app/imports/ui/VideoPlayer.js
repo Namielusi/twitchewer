@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+// import classnames from 'classnames';
 import videojs from 'video.js';
 import videojsQualitySelector from 'silvermine-videojs-quality-selector';
 import 'videojs-contrib-hls';
@@ -45,9 +46,9 @@ export default class VideoPlayer extends Component {
 
   render() {
     return (
-      <div>
+      <div className="w-100 h-100">
         <div data-vjs-player>
-          <video ref={(node) => { this.videoNode = node; }} className="video-js vjs-default-skin" width="1000" height="500" preload="auto" data-setup='{}'></video>
+          <video ref={(node) => { this.videoNode = node; }} className="video-js vjs-default-skin w-100 h-100" preload="auto" data-setup='{}'></video>
         </div>
       </div>
     );

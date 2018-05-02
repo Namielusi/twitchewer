@@ -24,6 +24,7 @@ import styles from './UserLayout.sass';
 export default class UserLayout extends Component {
   render() {
     const {
+      className,
       channel,
       children,
       sideBarType,
@@ -36,6 +37,7 @@ export default class UserLayout extends Component {
     const bodyClasses = classnames(
       styles.body,
       'mh-100',
+      className,
     );
 
     let sideBarComponent;

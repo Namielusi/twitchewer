@@ -48,7 +48,7 @@ export default function* fetchInitialData(action) {
         subscribed,
         lastPublish: lastVideoData.published_at,
         streaming: typeof streams[channel._id] === 'object',
-        streamInfo: streams[channel._id] || null,
+        streamInfo: streams[channel._id] || {},
         videos: [],
       });
     }));
