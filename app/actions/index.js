@@ -42,8 +42,9 @@ export const streamSources = {
 };
 
 export const videoList = {
-  request: channelId => action(VIDEO_LIST[REQUEST], { channelId }),
-  success: (channelId, list) => action(VIDEO_LIST[SUCCESS], { channelId, list }),
+  request: (channelId, channelName, page) =>
+    action(VIDEO_LIST[REQUEST], { channelId, channelName, page }),
+  success: (channelName, list) => action(VIDEO_LIST[SUCCESS], { channelName, list }),
   failure: error => action(VIDEO_LIST[FAILURE], { error }),
 };
 

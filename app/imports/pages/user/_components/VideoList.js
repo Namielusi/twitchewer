@@ -25,13 +25,13 @@ class VideoList extends Component {
   static propTypes = {
     className: PropTypes.string,
     channel: PropTypes.shape({}),
-    videos: PropTypes.array,
+    videos: PropTypes.shape({}),
   }
 
   static defaultProps = {
     className: '',
     channel: {},
-    videos: [],
+    videos: {},
   }
 
   render() {
@@ -40,10 +40,12 @@ class VideoList extends Component {
       videos,
     } = this.props;
 
-    // const classes = classnames('list-group-item', 'rounded-0', className);
-
-    const videoItems = _(videos)
-      .map(video => <VideoItem key={video._id} channel={channel} video={video} />)
+    const videoList = _(videos)
+      .reduce((acc, video) => {
+        acc.push(<VideoItem key={video.id} channel={channel} video={video} />);
+        return acc;
+      }, []);
+    const chunkedList = _(videoList)
       .chunk(4)
       .map(chunk => (
         <Row className="m-0">
@@ -54,7 +56,7 @@ class VideoList extends Component {
       ));
 
     return (
-      <Container className="p-4" fluid={true}>{videoItems.value()}</Container>
+      <Container className="p-4" fluid={true}>{chunkedList.value()}</Container>
     );
   }
 }

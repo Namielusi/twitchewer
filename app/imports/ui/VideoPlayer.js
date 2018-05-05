@@ -38,6 +38,10 @@ export default class VideoPlayer extends Component {
     this.player.src(this.props.src);
   }
 
+  componentWillReceiveProps(nextProps, props) {
+    this.player.src(nextProps.src || props.src);
+  }
+
   componentWillUnmount() {
     if (this.player) {
       this.player.dispose();

@@ -16,7 +16,7 @@ const port = 3000;
 app.use(express.static(path.join(__dirname, 'static')));
 
 app.use('/proxy/api', proxy({
-  target: 'http://api.twitch.tv',
+  target: 'https://api.twitch.tv',
   changeOrigin: true,
   pathRewrite: { '^/proxy/api': '/api' },
 }));

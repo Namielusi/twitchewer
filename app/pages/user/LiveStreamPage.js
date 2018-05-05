@@ -36,23 +36,22 @@ import VideoPlayer from '../../imports/ui/VideoPlayer';
 class LiveStreamPage extends Component {
   static propTypes = {
     user: PropTypes.shape({}),
-    channels: PropTypes.array,
+    channel: PropTypes.shape({}),
   }
 
   static defaultProps = {
     user: {},
-    channels: {},
+    channel: {},
   }
 
   componentWillMount() {
     const {
-      match,
       channel,
       fetchSources,
     } = this.props;
 
-    if (channel && channel.streaming) {
-      fetchSources(match.params.name);
+    if (channel && channel.live) {
+      fetchSources(channel.name);
     }
   }
 
@@ -62,16 +61,21 @@ class LiveStreamPage extends Component {
       channel,
     } = this.props;
 
-    console.log(channel && channel.streamInfo && channel.streamInfo.sources);
-
     if (!channel) {
       return <div />;
     }
 
     let player;
-    if (channel.streamInfo.sources) {
-      const sources = (channel.streamInfo.sources || [])
-        .map(item => ({ ...item, type: 'application/x-mpegURL' }));
+    if (channel.streamInfo && channel.streamInfo.sources) {
+      const sources = _.reduce(channel.streamInfo.sources || {}, (acc, value, key) => {
+        acc.push({
+          ...value,
+          type: 'application/x-mpegURL',
+        });
+        return acc;
+      }, []);
+
+      console.log(sources);
 
       player = <VideoPlayer className="w-100 h-75" src={sources} />;
     }
@@ -87,15 +91,10 @@ class LiveStreamPage extends Component {
   }
 }
 
-const mapStateToProps = ({ root: state }, props) => {
-  const channel = _.find(state.channels, { name: props.match.params.name });
-
-  return {
-    user: state.user,
-    channel,
-    sources: channel && channel.streamInfo && channel.streamInfo.sources,
-  };
-};
+const mapStateToProps = ({ root: state }, props) => ({
+  user: state.user,
+  channel: state.channels[props.match.params.name],
+});
 
 const mapDispatchToProps = dispatch => ({
   fetchSources: channelName => dispatch(streamSourcesAction.request(channelName)),

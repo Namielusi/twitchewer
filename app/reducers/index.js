@@ -5,12 +5,12 @@ import * as ActionType from '../actions';
 const initialState = {
   loading: false,
   accessToken: null,
-  user: {
+  profile: {
     id: null,
     name: null,
     displayName: null,
   },
-  channels: [],
+  channels: {},
 };
 
 export default (state = initialState, action) => {
@@ -62,46 +62,24 @@ export default (state = initialState, action) => {
 
     case ActionType.STREAM_SOURCES.SUCCESS: {
       const { channelName, sources } = action.payload;
+      const newState = _.cloneDeep(state);
 
-      const channels = state.channels.slice();
-      const index = _.findIndex(channels, { name: channelName });
-
-      channels[index].streamInfo.sources = sources;
-
-      return {
-        ...state,
-        channels,
-      };
+      return _.set(newState, `channels.${channelName}.streamInfo.sources`, sources);
     }
 
     case ActionType.VIDEO_LIST.SUCCESS: {
-      const { channelId, list } = action.payload;
+      const { channelName, list } = action.payload;
+      const newState = _.cloneDeep(state);
+      const videos = _.merge(newState.channels[channelName].videos, list);
 
-      const channels = state.channels.slice();
-      const index = _.findIndex(channels, { id: channelId });
-
-      channels[index].totalVideos = list._total;
-      channels[index].videos = list.videos;
-
-      return {
-        ...state,
-        channels,
-      };
+      return _.set(newState, `channels.${channelName}.videos`, videos);
     }
 
     case ActionType.VIDEO.SUCCESS: {
       const { id, channelName, sources } = action.payload;
+      const newState = _.cloneDeep(state);
 
-      const channels = state.channels.slice();
-      const channelIndex = _.findIndex(channels, { name: channelName });
-      const videoIndex = _.findIndex(channels[channelIndex], { id });
-
-      channels[channelIndex].videos[videoIndex].sources = sources;
-
-      return {
-        ...state,
-        channels,
-      };
+      return _.set(newState, `channels.${channelName}.videos.${id}.sources`, sources);
     }
 
     default: return state;

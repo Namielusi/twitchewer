@@ -60,14 +60,14 @@ class MainMenu extends Component {
     }
 
     const channelListItems = _(channels)
-      .orderBy(['streaming', 'streamInfo.viewers', 'subscribed', 'lastPublish'], ['desc', 'desc', 'desc', 'desc'])
+      .orderBy(['live', 'streamInfo.viewers', 'subscribed', 'lastPublish'], ['desc', 'desc', 'desc', 'desc'])
       .map((channel) => {
         const classes = classnames({
-          [itemStyles.item_streaming]: channel.streaming,
+          [itemStyles.item_streaming]: channel.live,
         });
         const smallClasses = classnames({
-          'text-muted': !channel.streaming,
-          'text-red': channel.streaming,
+          'text-muted': !channel.live,
+          'text-red': channel.live,
         });
         const title = (
           <span>
@@ -75,10 +75,10 @@ class MainMenu extends Component {
             { channel.subscribed && <Star className={itemStyles.item__subscribedIcon} /> }
           </span>
         );
-        const description = channel.streaming ?
+        const description = channel.live ?
           `Is streaming now — ${channel.streamInfo.viewers}` :
           `Published ${moment(channel.lastPublish).fromNow()}`;
-        const url = channel.streaming ?
+        const url = channel.live ?
           `/user/${channel.name}` :
           `/user/${channel.name}/videos`;
 

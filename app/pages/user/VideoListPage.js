@@ -33,11 +33,13 @@ class VideoListPage extends Component {
   static propTypes = {
     user: PropTypes.shape({}),
     channel: PropTypes.shape({}),
+    videos: PropTypes.shape({}),
   }
 
   static defaultProps = {
     user: {},
     channel: {},
+    videos: {},
   }
 
   componentWillMount() {
@@ -46,8 +48,8 @@ class VideoListPage extends Component {
       fetchVideoList,
     } = this.props;
 
-    if (channel) {
-      fetchVideoList(channel.id);
+    if (channel && _.keys(channel.videos).length < 16) {
+      fetchVideoList(channel.id, channel.name, 1);
     }
   }
 
@@ -55,6 +57,7 @@ class VideoListPage extends Component {
     const {
       user,
       channel,
+      videos,
     } = this.props;
 
     if (!channel) {
@@ -80,7 +83,7 @@ class VideoListPage extends Component {
             <PaginationLink next href="#" />
           </PaginationItem>
         </Pagination>
-        <VideoList channel={channel} videos={channel.videos} />
+        <VideoList channel={channel} videos={videos} />
       </UserLayout>
     );
   }
@@ -88,11 +91,12 @@ class VideoListPage extends Component {
 
 const mapStateToProps = ({ root: state }, props) => ({
   user: state.user,
-  channel: _.find(state.channels, { name: props.match.params.name }),
+  channel: state.channels[props.match.params.name],
+  videos: (state.channels[props.match.params.name] || {}).videos || {},
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchVideoList: channelId => dispatch(videoListAction.request(channelId)),
+  fetchVideoList: (channelId, channelName, page) => dispatch(videoListAction.request(channelId, channelName, page)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VideoListPage);

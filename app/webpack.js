@@ -15,6 +15,7 @@ const compiler = webpack({
     publicPath: '/',
     filename: 'bundle.js',
   },
+  target: 'node',
   module: {
     rules: [
       {

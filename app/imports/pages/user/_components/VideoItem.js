@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pure } from 'recompose';
@@ -35,24 +36,16 @@ class VideoItem extends Component {
 
   render() {
     const {
-      channel, // eslint-disable-line
-      video, // eslint-disable-line
+      channel,
+      video,
     } = this.props;
-
-    // const cardBadgeClasses = classnames('float-right', styles.video__duration);
-
-    const thumbnail =
-      (video.thumbnails && video.thumbnails.medium && video.thumbnails.medium[0] &&
-        video.thumbnails.medium[0].url) ||
-      (video.preview && video.preview.medium) ||
-      '';
 
     const isRecording = video.status === 'recording' ?
       <small className="text-primary">Recording...</small> : null;
 
     return (
-      <Link className="card" to={`./videos/${_.last(video._id.split('v'))}`}>
-        <CardImg src={thumbnail} />
+      <Link className="card" to={`./videos/${video.id}`}>
+        <CardImg src={(video.previews || {}).medium} />
         <CardImgOverlay>
           <CardSubtitle>
             <Badge className="float-right" color="light" pill>{moment().startOf('day').seconds(video.length).format('H:mm:ss')}</Badge>
@@ -67,7 +60,7 @@ class VideoItem extends Component {
         <CardFooter>
           <Row>
             <Col>
-              <small>{moment(video.published_at).format('LL')}</small>
+              <small>{moment(video.publishedAt).format('LL')}</small>
             </Col>
             <Col className="text-right">{isRecording}</Col>
           </Row>

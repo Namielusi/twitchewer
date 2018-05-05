@@ -34,16 +34,18 @@ export default function* fetchStreamSources(action) {
     parser.push(sourcesRaw.data);
     parser.end();
 
-    const sources = [];
+    const sources = {};
     parser.manifest.playlists.forEach((source) => {
       const { attributes, uri } = source;
 
       if (attributes.VIDEO === 'audio_only') { return; }
-      sources.push({
+      const label = attributes.VIDEO === 'chunked' ? 'source' : attributes.VIDEO;
+
+      sources[label] = {
         src: uri,
         resolution: attributes.RESOLUTION,
-        label: attributes.VIDEO === 'chunked' ? 'source' : attributes.VIDEO,
-      });
+        label,
+      };
     });
 
     yield put(ActionType.streamSources.success(channelName, sources));

@@ -15,16 +15,7 @@ export default function* fetchInitialData(action) {
     const { data: channelsRes } = yield call(api, 'get', `https://api.twitch.tv/kraken/users/${userId}/follows/channels`, { accessToken: action.payload.token });
     const { data: streamsRes } = yield call(api, 'get', 'https://api.twitch.tv/kraken/streams/followed', { accessToken: action.payload.token });
 
-    const channels = [];
-    const streams = {};
-
-    streamsRes.streams.forEach((stream) => {
-      streams[stream.channel._id] = {
-        game: stream.game,
-        previews: stream.preview,
-        viewers: stream.viewers,
-      };
-    });
+    const channels = {};
 
     yield Promise.all(_.map(channelsRes.follows, async ({ channel }) => {
       let subscribed;
@@ -39,19 +30,32 @@ export default function* fetchInitialData(action) {
 
       const { data: { videos: [lastVideoData] } } = await api('get', `https://api.twitch.tv/kraken/channels/${channel._id}/videos?limit=1`, { accessToken: action.payload.token });
 
-      channels.push({
-        id: channel._id,
+      channels[channel.name] = {
+        id: parseInt(channel._id, 10),
         name: channel.name,
         displayName: channel.display_name,
         logo: channel.logo,
         banner: channel.profile_banner,
         subscribed,
         lastPublish: lastVideoData.published_at,
-        streaming: typeof streams[channel._id] === 'object',
-        streamInfo: streams[channel._id] || {},
-        videos: [],
-      });
+        live: false,
+        streamInfo: {},
+        videosOrder: [],
+        videos: {},
+      };
     }));
+
+    streamsRes.streams.forEach((stream) => {
+      if (channels[stream.channel.name]) {
+        channels[stream.channel.name].live = true;
+        channels[stream.channel.name].streamInfo = {
+          game: stream.game,
+          previews: stream.preview,
+          viewers: stream.viewers,
+          sources: {},
+        };
+      }
+    });
 
     yield put(ActionType.channels.success(channels));
     yield put(ActionType.initialData.success());

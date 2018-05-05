@@ -1,4 +1,4 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 import { put, call, select } from 'redux-saga/effects';
 import { Parser } from 'm3u8-parser';
 
@@ -14,16 +14,16 @@ export default function* fetchStreamSources(action) {
   try {
     const { data: tokens } = yield call(api, 'get', `/proxy/api/vods/${id}/access_token`, { accessToken });
 
-    const sourcesRaw = yield call(api, 'get', `/proxy/usher/api/channel/hls/${channelName}.m3u8`, {
+    const sourcesRaw = yield call(api, 'get', `/proxy/usher/vod/${id}.m3u8`, {
       accessToken,
       params: {
-        player: 'twitchweb',
-        token: tokens.token,
-        sig: tokens.sig,
-        allow_audio_only: true,
-        allow_source: true,
-        type: 'any',
-        p: _.random(100000, 999999),
+        // player: 'twitchweb',
+        nauth: tokens.token,
+        nauthsig: tokens.sig,
+        // allow_audio_only: true,
+        // allow_source: true,
+        // type: 'any',
+        // p: _.random(100000, 999999),
       },
       headers: {
         Accept: null,
@@ -40,10 +40,9 @@ export default function* fetchStreamSources(action) {
 
       if (attributes.VIDEO === 'audio_only') { return; }
       sources.push({
-        src: uri,
+        src: `/proxy/video?url=${uri}`,
         resolution: attributes.RESOLUTION,
         label: attributes.VIDEO === 'chunked' ? 'source' : attributes.VIDEO,
-        sources: [],
       });
     });
 
