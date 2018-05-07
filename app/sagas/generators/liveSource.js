@@ -7,11 +7,13 @@ import api from '../../lib/api';
 
 import * as ActionType from '../../actions';
 
-export default function* fetchStreamSources(action) {
-  const { channelName } = action.payload;
-  const accessToken = yield select(getToken);
-
+export default function* fetchLiveSource(action) {
   try {
+    yield put(ActionType.startLoading('liveSource'));
+    const { channelName } = action.payload;
+    const accessToken = yield select(getToken);
+    const sources = {};
+
     const { data: tokens } = yield call(api, 'get', `/proxy/api/channels/${channelName}/access_token`, { accessToken });
 
     const sourcesRaw = yield call(api, 'get', `/proxy/usher/api/channel/hls/${channelName}.m3u8`, {
@@ -34,7 +36,6 @@ export default function* fetchStreamSources(action) {
     parser.push(sourcesRaw.data);
     parser.end();
 
-    const sources = {};
     parser.manifest.playlists.forEach((source) => {
       const { attributes, uri } = source;
 
@@ -45,11 +46,14 @@ export default function* fetchStreamSources(action) {
         src: uri,
         resolution: attributes.RESOLUTION,
         label,
+        type: 'application/x-mpegURL',
       };
     });
 
-    yield put(ActionType.streamSources.success(channelName, sources));
+    yield put(ActionType.liveSource.success(channelName, sources));
+    yield put(ActionType.finishLoading('liveSource'));
   } catch (e) {
-    yield put(ActionType.streamSources.failure(e));
+    yield put(ActionType.liveSource.failure(e));
+    yield put(ActionType.finishLoading('liveSource'));
   }
 }

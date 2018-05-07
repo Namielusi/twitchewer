@@ -10,7 +10,7 @@ import sagas from './sagas';
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['user', 'channels'],
+  blacklist: ['loading', 'profile', 'channels', 'channelsOrder'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducers);

@@ -51,6 +51,7 @@ const compiler = webpack({
   resolve: {
     extensions: ['*', '.js', '.jsx'],
     alias: {
+      Layout: path.resolve(__dirname, 'imports/layout/'),
       Actions: path.resolve(__dirname, 'actions/'),
       Reducers: path.resolve(__dirname, 'reducers/'),
       Lib: path.resolve(__dirname, 'lib/'),

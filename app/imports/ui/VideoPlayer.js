@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 // import classnames from 'classnames';
 import videojs from 'video.js';
 import videojsQualitySelector from 'silvermine-videojs-quality-selector';
@@ -9,7 +10,7 @@ import 'video.js/dist/video-js.css';
 
 videojsQualitySelector(videojs);
 
-export default class VideoPlayer extends Component {
+class VideoPlayer extends Component {
   static propTypes = {
     src: PropTypes.oneOfType([
       PropTypes.shape,
@@ -38,8 +39,14 @@ export default class VideoPlayer extends Component {
     this.player.src(this.props.src);
   }
 
-  componentWillReceiveProps(nextProps, props) {
-    this.player.src(nextProps.src || props.src);
+  shouldComponentUpdate(nextProps) {
+    return !_.isEqual(this.props.src, nextProps.src);
+  }
+
+  componentDidUpdate() {
+    const { src } = this.props;
+
+    this.player.src(src);
   }
 
   componentWillUnmount() {
@@ -58,3 +65,5 @@ export default class VideoPlayer extends Component {
     );
   }
 }
+
+export default VideoPlayer;

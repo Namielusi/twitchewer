@@ -31,6 +31,7 @@ module.exports = {
       },
       {
         test: /\.(scss|sass)$/,
+        exclude: /\.global\.(scss|sass)$/,
         use: ['style-loader', {
           loader: 'css-loader',
           options: {
@@ -38,6 +39,10 @@ module.exports = {
             localIdentName: '[name]__[local]___[hash:base64:5]',
           },
         }, 'postcss-loader', 'sass-loader'],
+      },
+      {
+        test: /\.global\.(scss|sass)$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
@@ -48,6 +53,8 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx'],
     alias: {
+      Layout: path.resolve(__dirname, 'app/imports/layout/'),
+      Imports: path.resolve(__dirname, 'app/imports/'),
       Actions: path.resolve(__dirname, 'app/actions/'),
       Reducers: path.resolve(__dirname, 'app/reducers/'),
       Lib: path.resolve(__dirname, 'app/lib/'),
@@ -66,7 +73,7 @@ module.exports = {
     port: 3000,
     proxy: {
       '/proxy/api': {
-        target: 'http://api.twitch.tv',
+        target: 'https://api.twitch.tv',
         changeOrigin: true,
         pathRewrite: { '^/proxy/api': '/api' },
       },
