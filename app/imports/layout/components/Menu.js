@@ -36,20 +36,11 @@ class Menu extends Component {
       return null;
     }
 
-    /*
-    const listItems = _(channels)
-      .filter(channel => channel.followed)
-      .orderBy(['live', 'streamInfo.viewers', 'subscribed', 'lastPublish'],
-        ['desc', 'desc', 'desc', 'desc'])
-      .map(channel => <MenuItem key={channel.id} channel={channel} />)
-      .value();
-    */
     const listItems = _(channels)
       .sortBy(channel =>
         _.findIndex(channelsOrder, item => item === channel.name))
       .map(channel => <MenuItem key={channel.id} channel={channel} />)
       .value();
-    // sorted = _.sortBy(items1, x => _.findIndex(items2, y => x.id === y.id))
 
     return (
       <div className="col-2 d-none d-xl-flex h-100 p-0 border-right" style={style}>

@@ -88,6 +88,41 @@ export default (state = initialState, action) => {
       return newState;
     }
 
+    case ActionType.RECORD_SOURCE.SUCCESS: {
+      const { channelName, videoId, sources } = action.payload;
+      const newState = _.cloneDeep(state);
+
+      _.set(newState, `channels.${channelName}.videos.${videoId}.sources`, sources);
+      return newState;
+    }
+
+    case ActionType.VIDEO_LIST.SUCCESS: {
+      const { channelName, videos } = action.payload;
+
+      const newState = _.cloneDeep(state);
+      const channel = newState.channels[channelName];
+
+      _.merge(channel.videos, videos);
+      channel.videosOrder = _(channel.videos)
+        .orderBy(['createdAt'], ['desc'])
+        .map(video => video.id)
+        .value();
+
+      newState.channels[channelName] = channel;
+
+      return newState;
+    }
+
+    case ActionType.VIDEO.SUCCESS: {
+      const { channelName, videoId, data } = action.payload;
+
+      const newState = _.cloneDeep(state);
+
+      _.set(newState, `channels.${channelName}.videos.${videoId}`, data);
+
+      return newState;
+    }
+
     // case ActionType.USER.SUCCESS: {
     //   return {
     //     ...state,

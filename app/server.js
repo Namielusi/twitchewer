@@ -33,7 +33,7 @@ app.use('/proxy/vod', proxy({
   pathRewrite: { '^/proxy/vod': '' },
 }));
 
-app.get('/proxy/video', async (req, res, next) => { // eslint-disable-line
+app.get('/proxy/video', async (req, res) => {
   const { url } = req.query;
 
   const vodRes = await axios({

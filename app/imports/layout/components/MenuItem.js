@@ -18,11 +18,15 @@ class MenuItem extends Component {
       channel,
     } = this.props;
 
+    const url = channel.live ?
+      `/channels/${channel.name}` : `/channels/${channel.name}/videos`;
     const subText = channel.live ?
       channel.streamInfo.game : `Published ${moment(channel.lastPublish).fromNow()}`;
 
+    const isActive = channelName => (match, location) => location.pathname.includes(channelName);
+
     return (
-      <NavLink key={channel.id} className="list-group-item list-group-item-action" to={`/channels/${channel.name}`}>
+      <NavLink key={channel.id} className="list-group-item list-group-item-action" to={url} isActive={isActive(channel.name)}>
         <div className="media">
           <img className="d-flex mr-3 rounded" src={channel.logo} style={{ width: 40, height: 40 }} />
           <div className="d-flex flex-column text-truncate" style={{ flexGrow: 1 }}>

@@ -1,8 +1,7 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import _ from 'lodash';
+import _ from 'lodash';
 
 import { liveSource as liveSourceAction } from 'Actions';
 
@@ -29,23 +28,21 @@ class LiveStreamPage extends Component {
     props.fetchLiveSource(props.match.params.name);
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps) {
     const {
       match,
       fetchLiveSource,
     } = this.props;
 
-    if (match.params.name && prevProps.match.params.name && match.params.name !== prevProps.match.params.name) {
+    if (match.params.name !== prevProps.match.params.name) {
       fetchLiveSource(match.params.name);
     }
   }
 
   render() {
     const {
-      match,
       channel,
       sources,
-      fetchLiveSource,
     } = this.props;
 
     const sourcesEx = _.reduce(sources, (acc, value) => ([ ...acc, value ]), []);

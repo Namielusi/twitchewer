@@ -8,11 +8,12 @@ import api from '../../lib/api';
 import * as ActionType from '../../actions';
 
 export default function* fetchLiveSource(action) {
+  const { channelName } = action.payload;
+  const accessToken = yield select(getToken);
+  const sources = {};
+
   try {
     yield put(ActionType.startLoading('liveSource'));
-    const { channelName } = action.payload;
-    const accessToken = yield select(getToken);
-    const sources = {};
 
     const { data: tokens } = yield call(api, 'get', `/proxy/api/channels/${channelName}/access_token`, { accessToken });
 

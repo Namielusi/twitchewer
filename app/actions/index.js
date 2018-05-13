@@ -12,9 +12,8 @@ const action = (type, payload = {}) => ({ type, payload });
 export const PROFILE = createRequestTypes('PROFILE');
 export const LIVE_SOURCE = createRequestTypes('LIVE_SOURCE');
 export const RECORD_SOURCE = createRequestTypes('RECORD_SOURCE');
-// export const STREAM_SOURCES = createRequestTypes('STREAM_SOURCES');
-// export const VIDEO_LIST = createRequestTypes('VIDEO_LIST');
-// export const VIDEO = createRequestTypes('VIDEO');
+export const VIDEO_LIST = createRequestTypes('VIDEO_LIST');
+export const VIDEO = createRequestTypes('VIDEO');
 
 export const START_LOADING = 'START_LOADING';
 export const FINISH_LOADING = 'FINISH_LOADING';
@@ -39,9 +38,25 @@ export const liveSource = {
 };
 
 export const recordSource = {
-  request: token => action(RECORD_SOURCE[REQUEST], { token }),
-  success: response => action(RECORD_SOURCE[SUCCESS], response),
+  request: (channelName, videoId) => action(RECORD_SOURCE[REQUEST], { channelName, videoId }),
+  success: (channelName, videoId, sources) => action(RECORD_SOURCE[SUCCESS], {
+    channelName, videoId, sources,
+  }),
   failure: error => action(RECORD_SOURCE[FAILURE], { error }),
+};
+
+export const videoList = {
+  request: (channelName, limit, offset) => action(VIDEO_LIST[REQUEST], {
+    channelName, limit, offset,
+  }),
+  success: (channelName, videos) => action(VIDEO_LIST[SUCCESS], { channelName, videos }),
+  failure: error => action(VIDEO_LIST[FAILURE], { error }),
+};
+
+export const video = {
+  request: (channelName, videoId) => action(VIDEO[REQUEST], { channelName, videoId }),
+  success: (channelName, videoId, data) => action(VIDEO[SUCCESS], { channelName, videoId, data }),
+  failure: error => action(VIDEO[FAILURE], { error }),
 };
 
 // export const streamSources = {

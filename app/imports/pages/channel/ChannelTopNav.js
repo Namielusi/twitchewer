@@ -6,7 +6,7 @@ import Link from 'react-router-dom/Link';
 import NavLink from 'react-router-dom/NavLink';
 
 const ChannelTopNav = ({ logo, name, displayName }) => (
-  <nav className="navbar navbar-expand-lg border-bottom navbar-light bg-light">
+  <nav className="navbar navbar-expand border-bottom navbar-light bg-light" style={{ overflowX: 'auto' }}>
     <Link className="navbar-brand" to={`/channels/${name}/info`}>
       <img className="d-inline-block rounded align-top mr-2" src={logo} width="30" height="30" alt="Channel logo" />
       {displayName}

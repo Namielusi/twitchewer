@@ -5,10 +5,11 @@ import api from '../../lib/api';
 import * as ActionType from '../../actions';
 
 export default function* fetchProfileData(action) {
+  const { accessToken } = action.payload;
+  const channels = {};
+
   try {
     yield put(ActionType.startLoading('profile'));
-    const { accessToken } = action.payload;
-    const channels = {};
 
     const { data: profile } = yield call(api, 'get', 'https://api.twitch.tv/kraken/user', { accessToken });
 
@@ -64,5 +65,6 @@ export default function* fetchProfileData(action) {
     yield put(ActionType.finishLoading('profile'));
   } catch (e) {
     yield put(ActionType.profile.failure(e));
+    yield put(ActionType.finishLoading('profile'));
   }
 }

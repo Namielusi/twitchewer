@@ -13,6 +13,7 @@ module.exports = {
     publicPath: '/',
     filename: 'bundle.js',
   },
+  mode: process.env.NODE_ENV !== 'production' ? 'development' : 'production',
   module: {
     rules: [
       {
@@ -23,7 +24,14 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader'],
+        use: ['babel-loader',
+          {
+            loader: 'eslint-loader',
+            options: {
+              emitWarning: true,
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
@@ -62,6 +70,9 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+    }),
     new Dotenv(),
   ],
   devtool: 'source-map',
