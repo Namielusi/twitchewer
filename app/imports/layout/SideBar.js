@@ -8,7 +8,7 @@ const SideBar = ({ style, hideSideBar, children }) => {
   }
 
   return (
-    <div className="col-5 col-lg-3 col-xl-2 h-100 border-left bg-light" style={style}>{children}</div>
+    <div className="col col-lg-3 col-xl-2 h-100 border-left bg-light" style={style}>{children}</div>
   );
 };
 

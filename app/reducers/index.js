@@ -117,8 +117,12 @@ export default (state = initialState, action) => {
       const { channelName, videoId, data } = action.payload;
 
       const newState = _.cloneDeep(state);
+      const video = _.merge(
+        _.get(newState, `channels.${channelName}.videos.${videoId}`, {}),
+        data,
+      );
 
-      _.set(newState, `channels.${channelName}.videos.${videoId}`, data);
+      _.set(newState, `channels.${channelName}.videos.${videoId}`, video);
 
       return newState;
     }

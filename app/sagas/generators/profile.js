@@ -47,6 +47,8 @@ export default function* fetchProfileData(action) {
           ...channels[stream.channel.name],
           live: true,
           streamInfo: {
+            title: stream.channel.status,
+            description: stream.channel.description,
             game: stream.game,
             previews: stream.preview,
             viewers: stream.viewers,

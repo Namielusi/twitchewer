@@ -26,7 +26,7 @@ export default function* fetchVideoList(action) {
         title: video.title,
         description: video.decsription,
         game: video.game,
-        previews: video.preview,
+        preview: video.preview.medium,
         resolutions: video.resolutions,
         sources: {},
         createdAt: video.created_at,

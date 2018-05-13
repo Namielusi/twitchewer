@@ -40,7 +40,7 @@ class VideoItem extends Component {
 
     return (
       <Link className="card" to={`./videos/${video.id}`}>
-        <img className="card-img" src={(video.previews || {}).medium} />
+        <img className="card-img" src={video.preview} />
         <div className="card-img-overlay">
           <div className="card-subtitle">
             <div className="badge badge-pill badge-light float-right ">

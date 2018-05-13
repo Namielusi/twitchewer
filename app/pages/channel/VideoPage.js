@@ -33,22 +33,25 @@ class VideoPage extends Component {
     props.fetchRecordSource(name, id);
   }
 
-  // componentDidUpdate(prevProps) {
-  //   const {
-  //     match,
-  //     fetchRecordSource,
-  //   } = this.props;
-  //
-  //   const { name, id } = match.params;
-  //
-  //   if (match.params.id !== prevProps.match.params.id) {
-  //     fetchRecordSource(name, id);
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    const {
+      match,
+      fetchVideo,
+      fetchRecordSource,
+    } = this.props;
+
+    const { name, id } = match.params;
+
+    if (match.params.id !== prevProps.match.params.id) {
+      fetchVideo(name, id);
+      fetchRecordSource(name, id);
+    }
+  }
 
   render() {
     const {
       channel,
+      video,
       sources,
     } = this.props;
 
@@ -69,6 +72,11 @@ class VideoPage extends Component {
               displayName={channel.displayName}
             />
             {body}
+            <div className="card border-left-0 border-right-0 border-bottom-0">
+              <div className="card-body">
+                <h5 className="card-title m-0">{video.title}</h5>
+              </div>
+            </div>
           </div>
         </Body>
         <SideBar>

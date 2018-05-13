@@ -45,9 +45,7 @@ class LiveStreamPage extends Component {
       sources,
     } = this.props;
 
-    const sourcesEx = _.reduce(sources, (acc, value) => ([ ...acc, value ]), []);
-
-    console.log('[RENDER]', channel.name, channel, sources, sourcesEx);
+    const sourcesEx = _.reduce(sources, (acc, value) => ([...acc, value]), []);
 
     let body = channel.live ? <Loading /> : <Loading text="Offline" />;
     if (sourcesEx.length > 0) {
@@ -64,6 +62,11 @@ class LiveStreamPage extends Component {
               displayName={channel.displayName}
             />
             {body}
+            <div className="card border-left-0 border-right-0 border-bottom-0">
+              <div className="card-body">
+                <h5 className="card-title m-0">{(channel.streamInfo || {}).title}</h5>
+              </div>
+            </div>
           </div>
         </Body>
         <SideBar>

@@ -85,9 +85,6 @@ const mapStateToProps = ({ root: state }) => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchProfileData: token => dispatch(profileAction.request(token)),
-  // updateLoading: data => dispatch(updateLoadingAction(data)),
-  // updateUserInfo: data => dispatch(updateUserInfoAction(data)),
-  // updateChannelList: data => dispatch(updateChannelListAction(data)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Layout));

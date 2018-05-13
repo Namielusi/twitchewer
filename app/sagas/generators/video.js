@@ -26,7 +26,7 @@ export default function* fetchVideo(action) {
       title: video.title,
       description: video.decsription,
       game: video.game,
-      previews: video.preview,
+      preview: video.preview,
       resolutions: video.resolutions,
       sources: {},
       mutedSegments: video.muted_segments,
