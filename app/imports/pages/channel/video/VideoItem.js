@@ -2,28 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pure } from 'recompose';
 import moment from 'moment';
-import _ from 'lodash';
 
-// import {
-//   Row,
-//   Col,
-//   Badge,
-//   CardImg,
-//   CardImgOverlay,
-//   CardBody,
-//   CardTitle,
-//   CardSubtitle,
-//   CardFooter,
-// } from 'reactstrap';
 import Link from 'react-router-dom/Link';
-
-// import styles from './VideoItem.sass';
 
 class VideoItem extends Component {
   static propTypes = {
     className: PropTypes.string,
-    channel: PropTypes.shape({}),
-    videos: PropTypes.shape({}),
+    channel: PropTypes.object,
+    video: PropTypes.object,
   }
 
   static defaultProps = {
@@ -33,10 +19,7 @@ class VideoItem extends Component {
   }
 
   render() {
-    const {
-      channel,
-      video,
-    } = this.props;
+    const { video } = this.props;
 
     return (
       <Link className="card" to={`./videos/${video.id}`}>

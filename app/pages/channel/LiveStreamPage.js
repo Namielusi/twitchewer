@@ -15,11 +15,15 @@ import VideoPlayer from 'Imports/ui/VideoPlayer';
 
 class LiveStreamPage extends Component {
   static propTypes = {
+    match: PropTypes.object.isRequired,
     channel: PropTypes.object,
+    sources: PropTypes.object,
+    fetchLiveSource: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     channel: {},
+    sources: {},
   }
 
   constructor(props) {

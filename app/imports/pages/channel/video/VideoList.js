@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { pure } from 'recompose';
 import _ from 'lodash';
 
-// import styles from './VideoList.sass';
-
 import VideoItem from './VideoItem';
 
 class VideoList extends Component {
@@ -12,12 +10,14 @@ class VideoList extends Component {
     className: PropTypes.string,
     channel: PropTypes.shape({}),
     videos: PropTypes.shape({}),
+    videosOrder: PropTypes.shape([]),
   }
 
   static defaultProps = {
     className: '',
     channel: {},
     videos: {},
+    videosOrder: [],
   }
 
   render() {
@@ -26,12 +26,6 @@ class VideoList extends Component {
       videos,
       videosOrder,
     } = this.props;
-
-    // const listItems = _(channels)
-    //   .sortBy(channel =>
-    //     _.findIndex(channelsOrder, item => item === channel.name))
-    //   .map(channel => <MenuItem key={channel.id} channel={channel} />)
-    //   .value();
 
     const videoList = _(videos)
       .sortBy(video =>
@@ -43,7 +37,7 @@ class VideoList extends Component {
     const chunkedList = _(videoList)
       .chunk(4)
       .map(chunk => (
-        <div className="row m-0 my-1">
+        <div key={chunk[0].key} className="row m-0 my-1">
           <div className="card-deck my-2">{chunk}</div>
         </div>
       ))

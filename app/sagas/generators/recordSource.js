@@ -3,7 +3,7 @@ import { put, call, select } from 'redux-saga/effects';
 import { waitSelect } from 'Lib/helper';
 import { Parser } from 'm3u8-parser';
 
-import { getToken, getProfileId } from '../selectors';
+import { getToken } from '../selectors';
 import api from '../../lib/api';
 
 import * as ActionType from '../../actions';

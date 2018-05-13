@@ -18,11 +18,18 @@ import VideoPlayer from 'Imports/ui/VideoPlayer';
 
 class VideoPage extends Component {
   static propTypes = {
+    match: PropTypes.object.isRequired,
     channel: PropTypes.object,
+    video: PropTypes.object,
+    sources: PropTypes.object,
+    fetchVideo: PropTypes.func.isRequired,
+    fetchRecordSource: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     channel: {},
+    video: {},
+    sources: {},
   }
 
   constructor(props) {

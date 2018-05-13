@@ -52,8 +52,6 @@ app.get('/proxy/video', async (req, res) => {
 });
 
 app.get('/*', (req, res) => {
-  console.log(req.originalUrl);
-
   res.sendFile(path.join(__dirname, 'static', 'index.html'));
 });
 

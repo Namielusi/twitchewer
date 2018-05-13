@@ -9,13 +9,15 @@ import Body from 'Layout/Body';
 import SideBar from 'Layout/SideBar';
 import ChannelTopNav from 'Imports/pages/channel/ChannelTopNav';
 import ChannelChat from 'Imports/pages/channel/ChannelChat';
-import VideoList from 'Imports/pages/videoList/VideoList';
+import VideoList from 'Imports/pages/channel/video/VideoList';
 
 class VideoListPage extends Component {
   static propTypes = {
+    match: PropTypes.object.isRequired,
     channel: PropTypes.object,
     videos: PropTypes.object,
     videosOrder: PropTypes.array,
+    fetchVideoList: PropTypes.func.isRequired,
   }
 
   static defaultProps = {

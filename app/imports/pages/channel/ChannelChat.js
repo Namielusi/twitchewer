@@ -1,5 +1,4 @@
-/* eslint-disable */
-import React, { Component } from 'react';
+import React, { Component } from 'react'; // eslint-disable-line
 
 const ChannelChat = () => (
   <div>Chat!</div>

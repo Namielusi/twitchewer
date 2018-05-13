@@ -1,9 +1,7 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import classnames from 'classnames';
 
 import { profile as profileAction } from 'Actions';
 import './Layout.sass';
@@ -13,11 +11,19 @@ import Menu from './components/Menu';
 
 const Layout = class Layout extends Component {
   static propTypes = {
+    accessToken: PropTypes.string.isRequired,
+    channels: PropTypes.object,
+    channelsOrder: PropTypes.array,
+    profile: PropTypes.object,
     hideMenu: PropTypes.bool,
     hideSideBar: PropTypes.bool,
+    children: PropTypes.node.isRequired,
   }
 
   static defaultProps = {
+    channels: {},
+    channelsOrder: [],
+    profile: {},
     hideMenu: false,
     hideSideBar: false,
   }
@@ -36,7 +42,6 @@ const Layout = class Layout extends Component {
 
   render() {
     const {
-      // loading,
       accessToken,
       channels,
       channelsOrder,
@@ -61,20 +66,25 @@ const Layout = class Layout extends Component {
       hideMenu,
     };
 
-    const childrenEx = React.Children.map(children, (component, index) => (
+    const childrenEx = React.Children.map(children, component => (
       React.cloneElement(component, childrenProps)
     ));
 
     return (
       <div className="container-fluid h-100 mh-100">
         <div className="row flex-column flex-lg-row h-100">
-          <Menu channels={channels} channelsOrder={channelsOrder} profile={profile} {...childrenProps} />
+          <Menu
+            channels={channels}
+            channelsOrder={channelsOrder}
+            profile={profile}
+            {...childrenProps}
+          />
           {childrenEx}
         </div>
       </div>
     );
   }
-}
+};
 
 const mapStateToProps = ({ root: state }) => ({
   accessToken: state.accessToken,

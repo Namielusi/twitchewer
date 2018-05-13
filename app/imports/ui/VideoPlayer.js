@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-// import classnames from 'classnames';
 import videojs from 'video.js';
 import videojsQualitySelector from 'silvermine-videojs-quality-selector';
 import 'videojs-contrib-hls';
@@ -32,8 +31,9 @@ class VideoPlayer extends Component {
       },
     };
 
-    this.player = videojs(this.videoNode, options, function onPlayerReady() {
-      console.log('onPlayerReady', this);
+    this.player = videojs(this.videoNode, options, () => {
+      // onPlayerReady
+      // console.log('onPlayerReady', this);
     });
 
     this.player.src(this.props.src);
