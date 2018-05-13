@@ -3,11 +3,10 @@ const express = require('express');
 const proxy = require('http-proxy-middleware');
 const axios = require('axios');
 
-const webpack = require('./webpack');
-
 const app = express();
 
 if (process.env.NODE_ENV !== 'production') {
+  const webpack = require('./webpack'); // eslint-disable-line
   app.use(webpack);
 }
 
