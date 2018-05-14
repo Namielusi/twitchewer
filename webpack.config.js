@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const Dotenv = require('dotenv-webpack');
+require('dotenv').config(); // eslint-disable-line
 
 module.exports = {
   entry: [
@@ -72,8 +72,10 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.CLIENT_ID': JSON.stringify(process.env.CLIENT_ID),
+      'process.env.API_SCOPE': JSON.stringify(process.env.API_SCOPE),
+      'process.env.OAUTH_REDIRECT': JSON.stringify(process.env.OAUTH_REDIRECT),
     }),
-    new Dotenv(),
   ],
   devtool: 'source-map',
   devServer: {
