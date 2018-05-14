@@ -53,6 +53,10 @@ export default (state = initialState, action) => {
       };
     }
 
+    case ActionType.LOG_OUT: {
+      return initialState;
+    }
+
     case ActionType.PROFILE.SUCCESS: {
       const { profile = {}, channels = {} } = action.payload;
 

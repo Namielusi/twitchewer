@@ -22,7 +22,8 @@ import ProfilePage from './pages/ProfilePage';
 import LiveStreamPage from './pages/channel/LiveStreamPage';
 import VideoListPage from './pages/channel/VideoListPage';
 import VideoPage from './pages/channel/VideoPage';
-// import OAuthPage from './pages/OAuthCallback';
+import OAuthPage from './pages/OAuthCallback';
+import LogOutPage from './pages/LogOut';
 
 // ######################################################
 
@@ -40,7 +41,8 @@ const AppContainer = () => (
   <ConnectedSwitch>
     <Route exact path="/" component={HomePage} />
     <Route exact path="/profile" component={ProfilePage} />
-    {/* <Route exact path="/oauth" component={OAuthPage} /> */}
+    <Route exact path="/oauth" component={OAuthPage} />
+    <Route exact path="/logout" component={LogOutPage} />
     <Route exact path="/channels/:name" component={LiveStreamPage} />
     <Route exact path="/channels/:name/videos" component={VideoListPage} />
     <Route exact path="/channels/:name/videos/:id" component={VideoPage} />
