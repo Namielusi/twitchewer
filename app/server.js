@@ -10,7 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(webpack);
 }
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'static')));
 
@@ -21,15 +21,15 @@ app.use('/proxy/api', proxy({
 }));
 
 app.use('/proxy/usher', proxy({
-  target: 'http://usher.twitch.tv',
+  target: 'https://usher.ttvnw.net',
   changeOrigin: true,
-  pathRewrite: { '^/proxy/usher': '' },
+  pathRewrite: { '^/proxy/usher': '/' },
 }));
 
 app.use('/proxy/vod', proxy({
   target: 'https://vod-metro.twitch.tv',
   changeOrigin: true,
-  pathRewrite: { '^/proxy/vod': '' },
+  pathRewrite: { '^/proxy/vod': '/' },
 }));
 
 app.get('/proxy/video', async (req, res) => {
@@ -43,7 +43,7 @@ app.get('/proxy/video', async (req, res) => {
     },
   });
 
-  const [, processedUrl, quality] = url.match(/http(?!s)?:\/\/[^/]+\/([^/]+)\/([a-zA-Z0-9]+)/);
+  const [, processedUrl, quality] = url.match(/(?!http|https):\/\/[^/]+\/([^/]+)\/([a-zA-Z0-9]+)/);
   const processed = vodRes.data.replace(/^([0-9]+(-muted)?.ts)/gm, `/proxy/vod/${processedUrl}/${quality}/$1`);
 
   res.set(vodRes.headers || {});

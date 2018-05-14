@@ -19,7 +19,7 @@ export default function* fetchProfileData(action) {
 
     yield channelsRes.follows.map(async ({ channel }) => {
       let subscribed;
-      api('get', `https://api.twitch.tv/kraken/users/${profileId}/subscriptions/${channel._id}`, { accessToken })
+      await api('get', `https://api.twitch.tv/kraken/users/${profileId}/subscriptions/${channel._id}`, { accessToken })
         .then(() => { subscribed = true; })
         .catch(() => { subscribed = false; });
 
