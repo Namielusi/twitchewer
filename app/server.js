@@ -21,15 +21,15 @@ app.use('/proxy/api', proxy({
 }));
 
 app.use('/proxy/usher', proxy({
-  target: 'https://usher.twitch.tv',
+  target: 'https://usher.ttvnw.net',
   changeOrigin: true,
-  pathRewrite: { '^/proxy/usher': '' },
+  pathRewrite: { '^/proxy/usher': '/' },
 }));
 
 app.use('/proxy/vod', proxy({
   target: 'https://vod-metro.twitch.tv',
   changeOrigin: true,
-  pathRewrite: { '^/proxy/vod': '' },
+  pathRewrite: { '^/proxy/vod': '/' },
 }));
 
 app.get('/proxy/video', async (req, res) => {

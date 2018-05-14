@@ -91,14 +91,14 @@ module.exports = {
         pathRewrite: { '^/proxy/api': '/api' },
       },
       '/proxy/usher': {
-        target: 'https://usher.twitch.tv',
+        target: 'https://usher.ttvnw.net',
         changeOrigin: true,
-        pathRewrite: { '^/proxy/usher': '' },
+        pathRewrite: { '^/proxy/usher': '/' },
       },
       '/proxy/vod': {
         target: 'https://vod-metro.twitch.tv',
         changeOrigin: true,
-        pathRewrite: { '^/proxy/vod': '' },
+        pathRewrite: { '^/proxy/vod': '/' },
       },
     },
   },
