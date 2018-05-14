@@ -43,7 +43,7 @@ app.get('/proxy/video', async (req, res) => {
     },
   });
 
-  const [, processedUrl, quality] = url.match(/http(?!s)?:\/\/[^/]+\/([^/]+)\/([a-zA-Z0-9]+)/);
+  const [, processedUrl, quality] = url.match(/(?!http|https):\/\/[^/]+\/([^/]+)\/([a-zA-Z0-9]+)/);
   const processed = vodRes.data.replace(/^([0-9]+(-muted)?.ts)/gm, `/proxy/vod/${processedUrl}/${quality}/$1`);
 
   res.set(vodRes.headers || {});
