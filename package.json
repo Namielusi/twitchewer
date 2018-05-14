@@ -7,7 +7,8 @@
     "start": "cross-env NODE_ENV=production node app/server.js",
     "dev": "cross-env NODE_ENV=development node app/server.js",
     "dev_w": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack.config.js --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
