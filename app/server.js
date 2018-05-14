@@ -21,7 +21,7 @@ app.use('/proxy/api', proxy({
 }));
 
 app.use('/proxy/usher', proxy({
-  target: 'http://usher.twitch.tv',
+  target: 'https://usher.twitch.tv',
   changeOrigin: true,
   pathRewrite: { '^/proxy/usher': '' },
 }));

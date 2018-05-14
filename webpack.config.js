@@ -91,7 +91,7 @@ module.exports = {
         pathRewrite: { '^/proxy/api': '/api' },
       },
       '/proxy/usher': {
-        target: 'http://usher.twitch.tv',
+        target: 'https://usher.twitch.tv',
         changeOrigin: true,
         pathRewrite: { '^/proxy/usher': '' },
       },
