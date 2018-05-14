@@ -6,9 +6,7 @@ import { videoList as videoListAction } from 'Actions';
 
 import Layout from 'Layout/Layout';
 import Body from 'Layout/Body';
-import SideBar from 'Layout/SideBar';
 import ChannelTopNav from 'Imports/pages/channel/ChannelTopNav';
-import ChannelChat from 'Imports/pages/channel/ChannelChat';
 import VideoList from 'Imports/pages/channel/video/VideoList';
 
 class VideoListPage extends Component {
@@ -62,9 +60,6 @@ class VideoListPage extends Component {
             <VideoList channel={channel} videos={videos} videosOrder={videosOrder} />
           </div>
         </Body>
-        <SideBar>
-          <ChannelChat />
-        </SideBar>
       </Layout>
     );
   }

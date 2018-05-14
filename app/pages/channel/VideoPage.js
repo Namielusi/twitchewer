@@ -6,6 +6,7 @@ import _ from 'lodash';
 import {
   video as videoAction,
   recordSource as recordSourceAction,
+  recordChat as recordChatAction,
 } from 'Actions';
 
 import Layout from 'Layout/Layout';
@@ -35,6 +36,10 @@ class VideoPage extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      time: 0,
+    };
+
     const { name, id } = props.match.params;
     props.fetchVideo(name, id);
     props.fetchRecordSource(name, id);
@@ -56,17 +61,33 @@ class VideoPage extends Component {
   }
 
   render() {
+    const { time } = this.state;
     const {
+      match,
       channel,
       video,
       sources,
+      chat,
+      fetchRecordChat,
     } = this.props;
 
     const sourcesEx = _.reduce(sources, (acc, value) => ([...acc, value]), []);
+    const tickerThrottle = _.throttle((data) => {
+      fetchRecordChat(match.params.name, match.params.id, { content_offset_seconds: data.time });
+    }, 80 * 1000);
+    const ticker = (event, data) => {
+      if (event === 'seeking') {
+        fetchRecordChat(match.params.name, match.params.id, {
+          content_offset_seconds: Math.max(data.time - 40, 0),
+        });
+      }
+      tickerThrottle(data);
+      this.setState({ time: data.time });
+    };
 
     let body = <Loading />;
     if (sourcesEx.length > 0) {
-      body = <VideoPlayer src={sourcesEx} />;
+      body = <VideoPlayer src={sourcesEx} ticker={ticker} />;
     }
 
     return (
@@ -87,7 +108,13 @@ class VideoPage extends Component {
           </div>
         </Body>
         <SideBar>
-          <ChannelChat />
+          <ChannelChat
+            channelName={match.params.name}
+            videoId={match.params.id}
+            time={time}
+            chat={chat}
+            fetchRecordChat={fetchRecordChat}
+          />
         </SideBar>
       </Layout>
     );
@@ -98,12 +125,15 @@ const mapStateToProps = ({ root: state }, props) => ({
   channel: state.channels[props.match.params.name],
   video: _.get(state, `channels.${props.match.params.name}.videos.${props.match.params.id}`, {}),
   sources: _.get(state, `channels.${props.match.params.name}.videos.${props.match.params.id}.sources`, {}),
+  chat: _.get(state, `channels.${props.match.params.name}.videos.${props.match.params.id}.chat`, {}),
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchVideo: (channelName, videoId) => dispatch(videoAction.request(channelName, videoId)),
   fetchRecordSource: (channelName, videoId) =>
     dispatch(recordSourceAction.request(channelName, videoId)),
+  fetchRecordChat: (channelName, videoId, data) =>
+    dispatch(recordChatAction.request(channelName, videoId, data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VideoPage);

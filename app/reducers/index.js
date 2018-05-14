@@ -100,6 +100,15 @@ export default (state = initialState, action) => {
       return newState;
     }
 
+    case ActionType.RECORD_CHAT.SUCCESS: {
+      const { channelName, videoId, list } = action.payload;
+      const newState = _.cloneDeep(state);
+
+      const chat = _.get(newState, `channels.${channelName}.videos.${videoId}.chat`, {});
+      _.set(newState, `channels.${channelName}.videos.${videoId}.chat`, _.assign(chat, list));
+      return newState;
+    }
+
     case ActionType.VIDEO_LIST.SUCCESS: {
       const { channelName, videos } = action.payload;
 

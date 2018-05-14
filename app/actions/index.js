@@ -13,6 +13,7 @@ export const LIVE_SOURCE = createRequestTypes('LIVE_SOURCE');
 export const RECORD_SOURCE = createRequestTypes('RECORD_SOURCE');
 export const VIDEO_LIST = createRequestTypes('VIDEO_LIST');
 export const VIDEO = createRequestTypes('VIDEO');
+export const RECORD_CHAT = createRequestTypes('RECORD_CHAT');
 
 export const START_LOADING = 'START_LOADING';
 export const FINISH_LOADING = 'FINISH_LOADING';
@@ -37,6 +38,16 @@ export const recordSource = {
     channelName, videoId, sources,
   }),
   failure: error => action(RECORD_SOURCE[FAILURE], { error }),
+};
+
+export const recordChat = {
+  request: (channelName, videoId, data) => action(RECORD_CHAT[REQUEST], {
+    channelName, videoId, data,
+  }),
+  success: (channelName, videoId, list) => action(RECORD_CHAT[SUCCESS], {
+    channelName, videoId, list,
+  }),
+  failure: error => action(RECORD_CHAT[FAILURE], { error }),
 };
 
 export const videoList = {

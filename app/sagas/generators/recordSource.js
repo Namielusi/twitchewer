@@ -8,7 +8,7 @@ import api from '../../lib/api';
 
 import * as ActionType from '../../actions';
 
-export default function* fetchrecordSource(action) {
+export default function* fetchRecordSource(action) {
   const { channelName, videoId } = action.payload;
   const accessToken = yield select(getToken);
   const sources = {};
