@@ -8,62 +8,52 @@ const createRequestTypes = base => [REQUEST, SUCCESS, FAILURE].reduce((acc, type
 }, {});
 const action = (type, payload = {}) => ({ type, payload });
 
-export const INITIAL_DATA = createRequestTypes('INITIAL_DATA');
-export const USER = createRequestTypes('USER');
-export const CHANNELS = createRequestTypes('CHANNELS');
-export const STREAMS = createRequestTypes('STREAMS');
-export const VIDEOS = createRequestTypes('VIDEOS');
+export const PROFILE = createRequestTypes('PROFILE');
+export const LIVE_SOURCE = createRequestTypes('LIVE_SOURCE');
+export const RECORD_SOURCE = createRequestTypes('RECORD_SOURCE');
+export const VIDEO_LIST = createRequestTypes('VIDEO_LIST');
+export const VIDEO = createRequestTypes('VIDEO');
 
+export const START_LOADING = 'START_LOADING';
+export const FINISH_LOADING = 'FINISH_LOADING';
 export const UPDATE_ACCESS_TOKEN = 'UPDATE_ACCESS_TOKEN';
+export const LOG_OUT = 'LOG_OUT';
 
-export const initialData = {
-  request: token => action(INITIAL_DATA[REQUEST], { token }),
-  success: response => action(INITIAL_DATA[SUCCESS], response),
-  failure: error => action(INITIAL_DATA[FAILURE], { error }),
+export const profile = {
+  request: accessToken => action(PROFILE[REQUEST], { accessToken }),
+  success: (profileInfo, channels) => action(PROFILE[SUCCESS], { profile: profileInfo, channels }),
+  failure: error => action(PROFILE[FAILURE], { error }),
 };
 
-export const user = {
-  request: token => action(USER[REQUEST], { token }),
-  success: response => action(USER[SUCCESS], response),
-  failure: error => action(USER[FAILURE], { error }),
+export const liveSource = {
+  request: channelName => action(LIVE_SOURCE[REQUEST], { channelName }),
+  success: (channelName, sources) => action(LIVE_SOURCE[SUCCESS], { channelName, sources }),
+  failure: error => action(LIVE_SOURCE[FAILURE], { error }),
 };
 
-export const channels = {
-  request: token => action(CHANNELS[REQUEST], { token }),
-  success: response => action(CHANNELS[SUCCESS], response),
-  failure: error => action(CHANNELS[FAILURE], { error }),
+export const recordSource = {
+  request: (channelName, videoId) => action(RECORD_SOURCE[REQUEST], { channelName, videoId }),
+  success: (channelName, videoId, sources) => action(RECORD_SOURCE[SUCCESS], {
+    channelName, videoId, sources,
+  }),
+  failure: error => action(RECORD_SOURCE[FAILURE], { error }),
 };
 
-export const streams = {
-  request: token => action(CHANNELS[REQUEST], { token }),
-  success: response => action(CHANNELS[SUCCESS], response),
-  failure: error => action(CHANNELS[FAILURE], { error }),
+export const videoList = {
+  request: (channelName, limit, offset) => action(VIDEO_LIST[REQUEST], {
+    channelName, limit, offset,
+  }),
+  success: (channelName, videos) => action(VIDEO_LIST[SUCCESS], { channelName, videos }),
+  failure: error => action(VIDEO_LIST[FAILURE], { error }),
 };
 
-export const videos = {
-  request: channelId => action(VIDEOS[REQUEST], { channelId }),
-  success: (channelId, videoList) => action(VIDEOS[SUCCESS], { channelId, videoList }),
-  failure: error => action(VIDEOS[FAILURE], { error }),
+export const video = {
+  request: (channelName, videoId) => action(VIDEO[REQUEST], { channelName, videoId }),
+  success: (channelName, videoId, data) => action(VIDEO[SUCCESS], { channelName, videoId, data }),
+  failure: error => action(VIDEO[FAILURE], { error }),
 };
 
+export const startLoading = name => action(START_LOADING, { name });
+export const finishLoading = name => action(FINISH_LOADING, { name });
 export const updateAccessToken = token => action(UPDATE_ACCESS_TOKEN, { token });
-
-// export const updateLoadingAction = state => ({
-//   type: 'UPDATE_LOADING',
-//   payload: state,
-// });
-
-// export const updateUserInfoAction = payload => ({
-//   type: 'UPDATE_USER_INFO',
-//   payload: {
-//     id: payload.id,
-//     name: payload.name,
-//     displayName: payload.displayName,
-//     logo: payload.logo,
-//   },
-// });
-
-// export const updateChannelListAction = list => ({
-//   type: 'UPDATE_CHANNEL_LIST',
-//   payload: list,
-// });
+export const logOut = () => action(LOG_OUT);

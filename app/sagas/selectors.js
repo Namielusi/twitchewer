@@ -1,2 +1,2 @@
 export const getToken = state => state.root.accessToken;
-export const getUserId = state => state.root.user.id;
+export const getProfileId = state => state.root.profile.id;

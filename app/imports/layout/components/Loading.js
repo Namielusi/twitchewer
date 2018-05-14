@@ -14,7 +14,7 @@ import {
 const Loading = () => (
   <Container className="h-100" fluid={true}>
     <Row className="align-items-center h-100">
-      <Col className="mx-auto" xs="3">
+      <Col className="mx-auto col col-lg-3">
         <Card>
           <CardBody>
             <CardTitle>Loading...</CardTitle>

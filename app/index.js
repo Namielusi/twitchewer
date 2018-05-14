@@ -11,15 +11,19 @@ import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 
 import 'normalize.css';
-import 'bootstrap/dist/css/bootstrap.css';
+import 'nprogress/nprogress.css';
+import 'bootstrap';
+import './bootstrap.global.sass';
 
 import Store from './store';
 
-import Layout from './imports/layouts/Layout';
 import HomePage from './pages/HomePage';
-import LiveStreamPage from './pages/user/LiveStreamPage';
-import VideoListPage from './pages/user/VideoListPage';
+import ProfilePage from './pages/ProfilePage';
+import LiveStreamPage from './pages/channel/LiveStreamPage';
+import VideoListPage from './pages/channel/VideoListPage';
+import VideoPage from './pages/channel/VideoPage';
 import OAuthPage from './pages/OAuthCallback';
+import LogOutPage from './pages/LogOut';
 
 // ######################################################
 
@@ -33,19 +37,15 @@ const { store, persistor } = Store(history);
 
 const ConnectedSwitch = connect(state => ({ location: state.router.location }))(Switch);
 
-// eslint-disable-next-line
-const RouteEx = ({ component: Component, ...props }) => {
-  const wrapper = () => <Layout><Component {...props}/></Layout>;
-  return <Route component={wrapper} {...props}/>;
-};
-
 const AppContainer = () => (
   <ConnectedSwitch>
-    <RouteEx exact path="/" component={HomePage} />
-    <RouteEx exact path="/oauth" component={OAuthPage} />
-    <RouteEx exact path="/user/:name" component={LiveStreamPage} />
-    <RouteEx path="/user/:name/videos" component={VideoListPage} />
-    <RouteEx path="/user/:name/videos/:page" component={VideoListPage} />
+    <Route exact path="/" component={HomePage} />
+    <Route exact path="/profile" component={ProfilePage} />
+    <Route exact path="/oauth" component={OAuthPage} />
+    <Route exact path="/logout" component={LogOutPage} />
+    <Route exact path="/channels/:name" component={LiveStreamPage} />
+    <Route exact path="/channels/:name/videos" component={VideoListPage} />
+    <Route exact path="/channels/:name/videos/:id" component={VideoPage} />
   </ConnectedSwitch>
 );
 
