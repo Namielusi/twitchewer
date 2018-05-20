@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import moment from 'moment';
 
 import {
   video as videoAction,
@@ -99,10 +100,19 @@ class VideoPage extends Component {
               name={channel.name}
               displayName={channel.displayName}
             />
+            <div className="card d-lg-none border-bottom-1">
+              <div className="card-body pl-3 pr-3 pt-1 pb-1">
+                <h6 className="card-title m-0">{video.title}</h6>
+              </div>
+            </div>
             {body}
-            <div className="card border-left-0 border-right-0 border-bottom-0">
+            <div className="card d-none d-lg-flex border-top-1">
               <div className="card-body">
-                <h5 className="card-title m-0">{video.title}</h5>
+                <div className="d-flex w-100 justify-content-between">
+                  <h5 className="card-title m-0">{video.title}</h5>
+                  <small className="text-muted">3 days ago</small>
+                </div>
+                <small className="card-subtitle text-muted">{video.game}</small>
               </div>
             </div>
           </div>

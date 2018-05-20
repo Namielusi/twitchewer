@@ -33,6 +33,7 @@ export default function* fetchRecordChat(action) {
           id: parseInt(value.commenter._id, 10),
           name: value.commenter.name,
           display_name: value.commenter.display_name,
+          color: value.message.user_color,
         },
         message: value.message.body,
         created_at: value.created_at,
