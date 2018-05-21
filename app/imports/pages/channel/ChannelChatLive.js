@@ -40,7 +40,12 @@ class ChannelChatLive extends Component {
 
     if (this.props.channel.id !== prevProps.channel.id) {
       this.websocket.close();
+
       this.websocket = new WebSocket('wss://irc-ws.chat.twitch.tv:443/', 'irc');
+      this.websocket.onopen = this.onSocketOpen;
+      this.websocket.onclose = this.onSocketClose;
+      this.websocket.onerror = this.onSocketError;
+      this.websocket.onmessage = this.onSocketMessage;
     }
   }
 
