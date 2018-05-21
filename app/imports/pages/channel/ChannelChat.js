@@ -40,7 +40,7 @@ class ChannelChat extends Component {
     const { time, chat } = this.props;
 
     const items = _.reduce(chat, (acc, value) => {
-      if (_.inRange(value.position, time - 180, time)) {
+      if (_.inRange(value.position, time - 180, time + 0.1)) {
         const commentStyle = { lineHeight: '1rem', wordWrap: 'break-word' };
         const commentNameStyle = { color: value.commenter.color };
         acc.push((<li key={value.id} className="list-group-item p-2 bg-light" style={commentStyle}>

@@ -9,7 +9,7 @@ import Layout from 'Layout/Layout';
 import Body from 'Layout/Body';
 import SideBar from 'Layout/SideBar';
 import ChannelTopNav from 'Imports/pages/channel/ChannelTopNav';
-import ChannelChat from 'Imports/pages/channel/ChannelChat';
+import ChannelChatLive from 'Imports/pages/channel/ChannelChatLive';
 import Loading from 'Imports/ui/Loading';
 import VideoPlayer from 'Imports/ui/VideoPlayer';
 
@@ -74,7 +74,9 @@ class LiveStreamPage extends Component {
           </div>
         </Body>
         <SideBar>
-          <ChannelChat />
+          <ChannelChatLive
+            channel={channel}
+          />
         </SideBar>
       </Layout>
     );
